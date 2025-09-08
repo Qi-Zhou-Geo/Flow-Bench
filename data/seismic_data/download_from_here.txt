@@ -1,0 +1,2 @@
+Please download the raw seismic data from here:
+https://zenodo.org/records/15020368
