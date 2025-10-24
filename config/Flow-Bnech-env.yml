@@ -1,0 +1,20 @@
+name: flow-bench
+channels:
+  - conda-forge
+  - defaults
+  - pyrocko
+dependencies:
+  - python=3.11
+  - matplotlib=3.6.2
+  - numpy
+  - pandas
+  - obspy
+  - numba
+  - h5py
+  - scikit-learn
+  - tqdm
+  - pathlib
+  - requests
+  - pyrocko
+  - pyqt
+  - scipy

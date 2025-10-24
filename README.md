@@ -37,3 +37,7 @@ qi.zhou@gfz.de or qi.zhou.geo@gmail.com <br>
 
 **[Kshitij Kar](https://github.com/Kshitij301199)** <br>
 kshitij.kar@gfz-potsdam.de <br>
+
+
+
+### Add validation, check whether is fiting the designed structure

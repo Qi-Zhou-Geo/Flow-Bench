@@ -1,0 +1,48 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "High",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Location": "empty",
+        "Component": "HHZ",
+        "Sampling Frequency [Hz]": 200,
+        "Distance to Channel [km]": 0.09,
+        "Data Uncertainty [freq]": "High",
+        "Data Uncertainty [time]": "High",
+        "Raw Data DOI [time]": "https://geofon.gfz-potsdam.de/doi/network/9J/2012",
+        "Related Papper DOI [time]": "https://geofon.gfz-potsdam.de/doi/network/9J/2012"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.62994, 46.2873]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "properties": {
+        "Catchment": "Wandong",
+        "Client": "High",
+        "Network": "AM",
+        "Station": "R9BF5",
+        "Location": "empty",
+        "Component": "EHZ",
+        "Sampling Frequency [Hz]": 200,
+        "Distance to Channel [km]": 0.16,
+        "Data Uncertainty [freq]": "High",
+        "Data Uncertainty [time]": "High",
+        "Raw Data DOI [time]": "https://geofon.gfz-potsdam.de/doi/network/9J/2012",
+        "Related Papper DOI [time]": "https://geofon.gfz-potsdam.de/doi/network/9J/2012"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [102.140772999999, 29.5424879999999]
+      }
+    }
+  ]
+}

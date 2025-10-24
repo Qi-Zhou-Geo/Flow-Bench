@@ -14,11 +14,16 @@ run_temp_test.sh
 .DS_Store
 .vscode
 
+temp_test.py
+run_temp_test.sh
+
 # ingore the folder and all files
-functions/downloader
+functions
 functions/PPSD
+plotting
 
 # catchment code and event list
-functions
 config/catchment_code.yaml
+
 data/event_catalog/Flow_Bench_Catalog.xlsx
+data/seismic
