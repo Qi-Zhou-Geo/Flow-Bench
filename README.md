@@ -25,8 +25,6 @@ c) save it as "data/event_catalog/Flow_Bench_Catalog_work.txt" in Flow-Bench. <b
 The [downloader](functions/downloader/download_raw_data.py) will automatically download the raw data from this Zenodo and FDSN based on (1).
 
 
-
-
 ### ❓️1. Have Questions? <br>
 1.1 Start by reading our related paper <br>
 **Qi Zhou**, Hui Tang, Michael Dietze, Fabian Walter, Dongri Song, Yan Yan, Shuai Li, and Jens M. Turowski. <br>
