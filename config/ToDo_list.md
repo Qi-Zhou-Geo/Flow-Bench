@@ -34,6 +34,12 @@ conda info --envs
 ```
 
 ### 4. Download the raw seismic data
+Make sure you have enough space to save the raw data. 
 ```sh
 python functions/downloader/download_raw_data.py
+```
+
+If you want to save the data elsewhere, please pass the path.
+```sh
+python functions/downloader/download_raw_data.py --output_folder "/path/to/your/data"
 ```

@@ -8,6 +8,7 @@ dependencies:
   - matplotlib=3.6.2
   - numpy
   - pandas
+  - scipy
   - obspy
   - numba
   - h5py
@@ -17,4 +18,7 @@ dependencies:
   - requests
   - pyrocko
   - pyqt
-  - scipy
+  - openpyxl
+  - ruamel.yaml
+  - pyyaml
+  - py7zr

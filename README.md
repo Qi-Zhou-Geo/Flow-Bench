@@ -11,8 +11,16 @@ we provide an open-access (to be released upon acceptance of our manuscript), <b
 well-labeled seismic dataset with attached data quality and uncertainty information.
 
 
-### 🛠️ 0. Major Changes for v0.1
-**1,** Initial the project.
+### 🛠️ 0. Major Changes for v0.2
+**(1)** Add the Flow_Bench_Catalog_work.txt <br>
+There are 205 channllized events. <br>
+Note: a) please download this file manually, b) change "dat" ->"txt", c) save it as "data/event_catalog/Flow_Bench_Catalog_work.txt" in Flow-Bench.
+
+**(2)** Add data downloader <br>
+
+The downloader (functions/downloader/download_raw_data.py) will automatly download the raw data from this Zenodo and FDSN based on (1).
+
+
 
 
 ### ❓️1. Have Questions? <br>

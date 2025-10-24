@@ -25,5 +25,7 @@ plotting
 # catchment code and event list
 config/catchment_code.yaml
 
-data/event_catalog/Flow_Bench_Catalog.xlsx
 data/seismic
+data/event_catalog/Flow_Bench_Catalog.xlsx
+data/event_catalog/Flow_Bench_Catalog_work.xlsx
+data/event_catalog/Flow_Bench_Catalog_work.txt
