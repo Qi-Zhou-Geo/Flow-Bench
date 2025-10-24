@@ -27,21 +27,25 @@ Illgraben-9J:
   path_mapping: European/Illgraben
   response_type: xml
   sensor_type: do-not-need
+
 Illgraben-9S:
   normalization_factor: do-not-need
   path_mapping: European/Illgraben
   response_type: xml
   sensor_type: do-not-need
+
 Luding-AM:
   normalization_factor: do-not-need
   path_mapping: Asian/Luding
   response_type: xml
   sensor_type: do-not-need
+
 Luding-LD:
   normalization_factor: do-not-need
   path_mapping: Asian/Luding
   response_type: simulate
   sensor_type: IGU_16HR_EB_3C_5Hz
+
 Luding-WD:
   normalization_factor: do-not-need
   path_mapping: Asian/Luding

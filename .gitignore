@@ -9,13 +9,11 @@
 # add the file if you do not want to track it
 temp_test.py
 run_temp_test.sh
+
 **/__pycache__/
 .idea/
 .DS_Store
 .vscode
-
-temp_test.py
-run_temp_test.sh
 
 # ingore the folder and all files
 functions
