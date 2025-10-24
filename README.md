@@ -2,8 +2,8 @@
 A global seismic record of channelized flow events.
 ---
 
-This is a global seismic record of channelized flow events, comprising x cases from y catchments: <br>
-x debris flows, x glacial lake outburst floods, and x lahars. <br>
+This is a global seismic record of channelized flow events, comprising **205** cases from **27** catchments: <br>
+**203** debris flows, **1** glacial lake outburst floods, and **1** lahars. <br>
 
 If you are interested in channelized flow events, <br>
 including mass movements or fluvial processes occurring within channels, <br>
@@ -12,13 +12,17 @@ well-labeled seismic dataset with attached data quality and uncertainty informat
 
 
 ### 🛠️ 0. Major Changes for v0.2
-**(1)** Add the Flow_Bench_Catalog_work.txt <br>
-There are 205 channllized events. <br>
-Note: a) please download this file manually, b) change "dat" ->"txt", c) save it as "data/event_catalog/Flow_Bench_Catalog_work.txt" in Flow-Bench.
+This version is backed up at [here](https://doi.org/10.5281/zenodo.17432440).<br>
+
+**(1)** Add the **Flow_Bench_Catalog_work.txt** <br>
+There are 205 channelized events. <br>
+Note: <br>
+a) please download this file manually,<br> 
+b) change "dat" -> "txt", <br>
+c) save it as "data/event_catalog/Flow_Bench_Catalog_work.txt" in Flow-Bench. <br>
 
 **(2)** Add data downloader <br>
-
-The downloader (functions/downloader/download_raw_data.py) will automatly download the raw data from this Zenodo and FDSN based on (1).
+The [downloader](functions/downloader/download_raw_data.py) will automatically download the raw data from this Zenodo and FDSN based on (1).
 
 
 
@@ -45,7 +49,3 @@ qi.zhou@gfz.de or qi.zhou.geo@gmail.com <br>
 
 **[Kshitij Kar](https://github.com/Kshitij301199)** <br>
 kshitij.kar@gfz-potsdam.de <br>
-
-
-
-### Add validation, check whether is fiting the designed structure
