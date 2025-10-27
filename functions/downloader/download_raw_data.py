@@ -15,28 +15,30 @@ from ruamel.yaml import YAML
 
 import numpy as np
 import pandas as pd
+
 import requests
+from tqdm import tqdm
+from urllib.parse import urlparse
+
+import zipfile
 import py7zr
 
-from tqdm import tqdm
-
 from pathlib import Path
-from urllib.parse import urlparse
 
 from obspy.clients.fdsn import Client
 from obspy import read, Stream, read_inventory, signal, UTCDateTime
 
 
-def zenodo_downloader(zenodo_url, output_folder=None):
+def zenodo_downloader(zenodo_url, output_folder=None, compressed_type="7z"):
 
-    temp_7z = f"{output_folder}/temp.7z"
+    temp_compressed = f"{output_folder}/temp.{compressed_type}"
 
     # Stream download
     response = requests.get(zenodo_url, stream=True)
     total_size = int(response.headers.get('content-length', 0))
     block_size = 2 * 1024 * 1024  # 2 MB
 
-    with open(temp_7z, "wb") as f, tqdm(
+    with open(temp_compressed, "wb") as f, tqdm(
         desc=f"Downloading raw data from: {zenodo_url}",
         total=total_size,
         unit="iB",
@@ -47,12 +49,17 @@ def zenodo_downloader(zenodo_url, output_folder=None):
             f.write(data)
             bar.update(len(data))
 
-    # Extract .7z
-    with py7zr.SevenZipFile(temp_7z, mode='r') as archive:
-        archive.extractall(path=output_folder)
+    if compressed_type == "7z":
+        with py7zr.SevenZipFile(temp_compressed, mode='r') as archive:
+            archive.extractall(path=output_folder)
+    elif compressed_type == "zip":
+        with zipfile.ZipFile(temp_compressed, mode='r') as archive:
+            archive.extractall(path=output_folder)
+    else:
+        print(f"Error! please check the file compressed type {compressed_type}.")
 
     # Delete temp file
-    os.remove(temp_7z)
+    os.remove(temp_compressed)
 
 def fdsn_downloader(arr, output_folder, before, after):
 
@@ -187,9 +194,13 @@ def main(output_folder=None,
 
     # down from Zenodo
     try:
+        # compressed_type = "zip"
+        # zenodo_url = f"https://zenodo.org/record/15020368/files/0seismic_feature.{compressed_type}"
+        # output_folder = "/Users/qizhou/#python/#GitHub_saved/Flow-Bench/data"
+
         zenodo_downloader(zenodo_url, output_folder)
     except Exception as e:
-        print("Please download it manually.")
+        print("Please download it (zenodo_downloader) manually.")
 
     # down from FDSN
     df = pd.read_csv(f"{project_root}/data/event_catalog/Flow_Bench_Catalog_work.txt", header=0)
