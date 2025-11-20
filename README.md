@@ -1,47 +1,55 @@
-## 📢 Welcome to **Flow-Bench**
+## 📢 Welcome to **Flow-Bench**:
 A global seismic record of channelized flow events.
 ---
 
-This is a global seismic record of channelized flow events, comprising **205** cases from **27** catchments: <br>
-**203** debris flows, **1** glacial lake outburst floods, and **1** lahars. <br>
+### What Flow-Bench Offers
 
-If you are interested in channelized flow events, <br>
-including mass movements or fluvial processes occurring within channels, <br>
-we provide an open-access (to be released upon acceptance of our manuscript), <br>
-well-labeled seismic dataset with attached data quality and uncertainty information.
+Flow-Bench provides a **global seismic record of channelized flow events**, 
+offering an open-access, well-labeled seismic dataset with accompanying data quality and uncertainty information.  
 
+Flow-Bench (v0.3) comprises **139 events**:
+- **66 debris flows** from Illgraben (2013–2014, 2019–2020, and 2022)  
+- **73 debris flows** from locations outside Illgraben  
+- **1 glacial lake outburst flood (GLOF)**  
+- **1 lahar**
 
-### 🛠️ 0. Major Changes for v0.2
-This version is backed up at [here](https://doi.org/10.5281/zenodo.17432440).<br>
+These events originate from **21 catchments** and represent **runoff-generated debris flows** 
+occurring across diverse environmental settings:
+- Post-fire catchments (e.g., Museum Fire and Montecito)  
+- Post-earthquake catchments (e.g., Ramche, Foutangba, and Ergou)  
+- High-erosion catchments (e.g., Chalk Cliffs and Illgraben)
 
-**(1)** Add the **Flow_Bench_Catalog_work.txt** <br>
-There are 205 channelized events. <br>
-Note: <br>
-a) please download this file manually,<br> 
-b) change "dat" -> "txt", <br>
-c) save it as "data/event_catalog/Flow_Bench_Catalog_work.txt" in Flow-Bench. <br>
-
-**(2)** Add data downloader <br>
-The [downloader](functions/downloader/download_raw_data.py) will automatically download the raw data from this Zenodo and FDSN based on (1).
+For more details and visualizations, 
+visit the [Flow-Bench project page](https://qi-zhou-geo.github.io/Flow-Bench/).
 
 
-### ❓️1. Have Questions? <br>
+### 🛠️ 0. Major Changes in v0.3
+
+(1) **Flow-Bench Model**  
+   - Built the Flow-Bench model to process seismic traces.  
+   - Defines the event start and end times using the STA/LTA method.  
+   - Calculates the spectral exponent $\beta$ in  $PSD(f) \propto f^{\beta}$
+   - Identifies the most similar debris flows using DWT distance methods, referencing Illgraben events.  
+
+(2) **Metadata and Data Access**  
+   - Opens the [metadata](data/event_catalog/Flow_Bench_Catalog_work_v0dot3.txt) and provides a data [downloader](download_raw_data.py) for easy access to the seismic records.
+
+This version is backed up at [zenodo](https://doi.org/10.5281/zenodo.17432440).<br>
+
+### 🚀 1. How to Use Our Pre-trained Models on Your Data?
+Check the [tutorial](demo/tutorial.ipynb) and run it on 
+[![Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Qi-Zhou-Geo/Flow-Bench/blob/main/demo/tutorial.ipynb)
+
+### ❓️2. Have Questions? <br>
 1.1 Start by reading our related paper <br>
 **Qi Zhou**, Hui Tang, Michael Dietze, Fabian Walter, Dongri Song, Yan Yan, Shuai Li, and Jens M. Turowski. <br>
 "Similarity of Debris Flows in Seismic Records." <br>
 **_Preprint_** (submitted to AGU Advance at August 2025). <br>
 [Click here for the manuscript](https://doi.org/10.22541/essoar.175676964.46168374/v1) <br>
 
-If you still have questions, feel free to contact the project contributors.
+If you still have questions, feel free to contact us.
 
-1.2 Or reach out to our research groups <br>
-[Hazards and Surface Processes Research Group and Digital Earth Lab](https://www.gfz.de/en/section/earth-surface-process-modelling/topics/hazards-and-surface-processes) <br> 
-Led by Dr. Hui [Tang](https://www.gfz.de/en/staff/hui.tang/sec47) <br>
-[Physical Earth Surface Modelling Lab](https://www.gfz.de/en/staff/jens.turowski/sec46) <br>
-Led by Dr. Jens [Turowski](https://www.gfz.de/en/staff/jens.turowski/sec46).
-
-
-### 💪 2. Contributors <br>
+### 💪 3. Contributors <br>
 **[Qi Zhou](https://github.com/Qi-Zhou-Geo)** <br>
 qi.zhou@gfz.de or qi.zhou.geo@gmail.com <br>
 

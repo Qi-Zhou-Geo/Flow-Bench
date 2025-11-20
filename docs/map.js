@@ -6,7 +6,7 @@ const baseMaps = {
   "Esri Satellite": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}')
 };
 
-baseMaps["OSM Standard"].addTo(map); // default
+baseMaps["Esri Satellite"].addTo(map); // default
 L.control.layers(baseMaps).addTo(map); // layer switcher
 
 

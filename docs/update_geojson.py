@@ -13,22 +13,23 @@ import numpy as np
 # <editor-fold desc="add the sys.path to search for custom modules">
 from pathlib import Path
 current_dir = Path(__file__).resolve().parent
+
 # using ".parent" on a "pathlib.Path" object moves one level up the directory hierarchy
-project_root = current_dir.parent.parent
+project_root = current_dir.parent
 import sys
 sys.path.append(str(project_root))
 # </editor-fold>
 
 
 
-def rewrite_geojson(project_root):
+def rewrite_geojson(project_root, data_version="v0dot8-12"):
 
-    df = pd.read_csv(f"{project_root}/data/event_catalog/test111.txt", header=0)
+    df = pd.read_csv(f"{project_root}/data/event_catalog/Flow_Bench_Catalog_work_{data_version}.txt", header=0)
 
     features = []
     for _, row in df.iterrows():
         feature = geojson.Feature(
-            geometry=geojson.Point((row['Longitude_sta'], row['Latitude'])),
+            geometry=geojson.Point((row['Longitude-Station(-denote-West)'], row['Latitude-Station(-denote-South)'])),
             properties={
                 "Catchment": row['Catchment'],
                 "Client": row['Client'],
@@ -42,7 +43,7 @@ def rewrite_geojson(project_root):
     feature_collection = geojson.FeatureCollection(features)
 
     # Write to data.geojson
-    with open(f"{project_root}/docs/data1.geojson", "w", encoding="utf-8") as f:
+    with open(f"{project_root}/docs/data.geojson", "w", encoding="utf-8") as f:
         geojson.dump(feature_collection, f, ensure_ascii=False, indent=2)
 
     print("data.geojson successfully created!")

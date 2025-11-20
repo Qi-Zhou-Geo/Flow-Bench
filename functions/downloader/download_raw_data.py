@@ -13,14 +13,11 @@ import argparse
 
 from ruamel.yaml import YAML
 
-import time
-from datetime import datetime
-
 import numpy as np
 import pandas as pd
 
 import requests
-from tqdm import tqdm, trange
+from tqdm import tqdm
 from urllib.parse import urlparse
 
 import zipfile
@@ -30,6 +27,16 @@ from pathlib import Path
 
 from obspy.clients.fdsn import Client
 from obspy import read, Stream, read_inventory, signal, UTCDateTime
+
+# <editor-fold desc="add the sys.path to search for custom modules">
+from pathlib import Path
+current_dir = Path(__file__).resolve().parent
+# using ".parent" on a "pathlib.Path" object moves one level up the directory hierarchy
+
+project_root = current_dir.parent.parent
+import sys
+sys.path.append(str(project_root))
+# </editor-fold>
 
 
 def zenodo_downloader(zenodo_url, output_folder=None, compressed_type="7z"):
@@ -64,86 +71,9 @@ def zenodo_downloader(zenodo_url, output_folder=None, compressed_type="7z"):
     # Delete temp file
     os.remove(temp_compressed)
 
-def fdsn_downloader1(arr, output_folder, before, after):
-
-    total_steps = arr.shape[0] * before * after
-
-    for idx in tqdm(range(arr.shape[0]),
-                    desc=f"Downloading raw data from FDSN",
-                    total=total_steps):
-
-        continent = arr[idx, 1]
-        catchment = arr[idx, 2]
-        client_name = arr[idx, 5]
-
-        network, station, location, channel = arr[idx, 6], arr[idx, 7], arr[idx, 8], arr[idx, 9]
-        start_time, end_time = arr[idx, 12], arr[idx, 13]
-
-        if location == "empty":
-            location = ""
-        else:
-            pass
-
-        start_time = UTCDateTime(start_time)
-        end_time = UTCDateTime(end_time)
-        client = Client(client_name)
-
-        year = start_time.year
-        julian_day = np.arange(int(start_time.julday - before), int(end_time.julday + after + 1), 1)
-
-
-        for idy, j in enumerate(julian_day):
-
-            start_time = UTCDateTime(year=year, julday=j)
-            end_time = start_time + 3600 * 24 + 1
-            st = client.get_waveforms(network=network, station=station,
-                                      location=location, channel=channel,
-                                      starttime=start_time, endtime=end_time)
-
-            try:
-                st.merge(method=1, fill_value='latest', interpolation_samples=0)
-            except Exception as e:
-                print(e)
-
-            output_dir = f"{output_folder}/seismic/{continent}/{catchment}/{start_time.year}/{station}/{channel}"
-            os.makedirs(name=output_dir, exist_ok=True)
-            file_name = f"{network}.{station}.{channel}.{start_time.year}.{str(start_time.julday).zfill(3)}"
-            st.write(f"{output_dir}/{file_name}.mseed", format="MSEED")
-
-
-
-            inv = client.get_stations(starttime=start_time, endtime=end_time,
-                                      network=network, station=station,
-                                      location=location, channel=channel,
-                                      level="response", format="xml")
-
-            output_dir = f"{output_folder}/seismic/{continent}/{catchment}/meta_data"
-            os.makedirs(name=output_dir, exist_ok=True)
-            inv.write(f"{output_dir}/{network}_{start_time.year}_{j}.xml", format="STATIONXML")
-
-            print(f"Done! {file_name}, labelled time: {arr[idx, 12], arr[idx, 13]}")
-
-            del st
-
-        del client
-
-    # return the idx for re-run
-    downloaded_index = idx
-    return downloaded_index
-
-def fdsn_downloader(arr, idx, output_folder, before, after):
-
-    continent = arr[idx, 1]
-    catchment = arr[idx, 2]
-    client_name = arr[idx, 5]
-
-    network, station, location, channel = arr[idx, 6], arr[idx, 7], arr[idx, 8], arr[idx, 9]
-    start_time, end_time = arr[idx, 12], arr[idx, 13]
-
-    if location == "empty":
-        location = ""
-    else:
-        pass
+def single_downloader(output_folder, continent, catchment,
+                      client_name, network, station, location, channel, start_time, end_time,
+                      before, after):
 
     start_time = UTCDateTime(start_time)
     end_time = UTCDateTime(end_time)
@@ -179,12 +109,32 @@ def fdsn_downloader(arr, idx, output_folder, before, after):
         os.makedirs(name=output_dir, exist_ok=True)
         inv.write(f"{output_dir}/{network}_{start_time.year}_{j}.xml", format="STATIONXML")
 
-        print(f"Done! {file_name}, labelled time: {arr[idx, 12], arr[idx, 13]}")
+        print(f"Done {file_name},\n"
+              f"saved to {output_dir}")
 
-        del st
+def fdsn_downloader(arr, output_folder, before, after):
 
-    del client
+    total_steps = arr.shape[0] * before * after
 
+    for idx in tqdm(range(arr.shape[0]),
+                    desc=f"Downloading raw data from FDSN",
+                    total=total_steps):
+
+        continent = arr[idx, 1]
+        catchment = arr[idx, 2]
+        client_name = arr[idx, 5]
+
+        network, station, location, channel = arr[idx, 6], arr[idx, 7], arr[idx, 8], arr[idx, 9]
+        start_time, end_time = arr[idx, 12], arr[idx, 13]
+
+        if location == "empty":
+            location = ""
+        else:
+            pass
+
+        single_downloader(output_folder, continent, catchment,
+                          client_name, network, station, location, channel, start_time, end_time,
+                          before, after)
 
 def merge_stationxml(output_folder):
 
@@ -228,12 +178,6 @@ def merge_stationxml(output_folder):
                 except Exception as e:
                     print(f"Error writing {out_path}: {e}")
 
-def sleeper(sleeping_time=10):
-
-    for i in trange(sleeping_time):
-        tqdm.write(f"sleeping {i}")
-        time.sleep(1)
-
 def main(output_folder=None,
          zenodo_url="https://zenodo.org/record/17432440/files/seismic.7z"):
 
@@ -252,7 +196,7 @@ def main(output_folder=None,
         yaml = YAML()
         yaml.preserve_quotes = True
 
-        catchment_code = f"{project_root}/config/catchment_code.yaml"
+        catchment_code = f"{project_root}/config/data_path.yaml"
         with open(catchment_code, "r") as f:
             config = yaml.load(f)
 
@@ -278,43 +222,12 @@ def main(output_folder=None,
 
     # down from FDSN
     df = pd.read_csv(f"{project_root}/data/event_catalog/Flow_Bench_Catalog_work.txt", header=0)
+
     arr = np.array(df)
     index = np.where((arr[:, 5] != "Private") &
-                     (arr[:, 5] != "Zenodo"))[0]
-    arr = arr[index] # only selecte the FDSN event
+                     (arr[:, 5] != "Zenodo"))
 
-    # run the downloader
-    error_index = []
-    for idx in trange(arr.shape[0]):
-        try:
-            fdsn_downloader(arr=arr, idx=idx, output_folder=output_folder, before=1, after=1)
-        except Exception as e1:
-            print(e1)  # sometimes the FDSN will return error, QZ does not what happends
-            sleeper(sleeping_time=3)  # sleep 10 seconds then re-start the downloading
-            tqdm.write(f"Sleeping 3 seconds at {datetime.now()}")
-
-            # seceond attemp
-            try:
-                fdsn_downloader(arr=arr, idx=idx, output_folder=output_folder, before=1, after=1)
-            except Exception as e2:
-                print(e2)
-                error_index.append(idx)
-
-    # check whether "error_index" is empty
-    if len(error_index) != 0: # empty -> all events downloaded correctly
-        failed_downloading = []
-        for idx in error_index:
-            try:
-                fdsn_downloader(arr=arr, idx=idx, output_folder=output_folder, before=1, after=1)
-            except Exception as e:
-                tqdm.write(f"{e}")
-                failed_downloading.append(idx)
-
-        for idx in failed_downloading:
-            tqdm.write(f"failed_downloading: {arr[idx]}")
-
-
-    # merge the download response file
+    fdsn_downloader(arr=arr[index], output_folder=output_folder, before=1, after=1)
     merge_stationxml(output_folder)
 
 if __name__ == "__main__":
@@ -323,3 +236,17 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     main(args.output_folder)
+
+
+# # user case
+# output_folder, continent, catchment = current_dir, "North_American", "Mount_Joffre"
+# client_name, network, station, location, channel = "IRIS", "CN", "WSLR", "", "HHZ"
+# start_time, end_time = "2019-05-13T13:00:00", "2019-05-16T17:00:00"
+# before, after = 5, 5
+# single_downloader(output_folder, continent, catchment,
+#                   client_name, network, station, location, channel,
+#                   start_time, end_time,
+#                   before, after)
+#
+# output_folder = "/Users/qizhou/Desktop"
+# merge_stationxml(output_folder)

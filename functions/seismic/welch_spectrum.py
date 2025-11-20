@@ -11,13 +11,13 @@ import numpy as np
 from scipy.signal import welch
 
 
-def welch_psd(data, sampling_freq, f_min, f_max, segment_window=10, scaling="density", unit_dB=True):
+def welch_psd(data, sampling_rate, f_min, f_max, segment_window=10, scaling="density", unit_dB=True):
     """
     Estimate power spectral density (PSD) using Welch’s method
 
     Args:
         data: 1D numpy array, Time series data (m/s).
-        sampling_freq: int, sampling frequency (Hz).
+        sampling_rate: int, sampling frequency (Hz).
         f_min, f_max: float, Min and max frequency (Hz).
         segment_window: float or int, window size for the data segment (seconds)
         scaling: str, welch methods, either "density" or "spectrum"
@@ -30,10 +30,10 @@ def welch_psd(data, sampling_freq, f_min, f_max, segment_window=10, scaling="den
 
     """
 
-    nperseg = sampling_freq * segment_window
+    nperseg = sampling_rate * segment_window
     noverlap = nperseg // 2 # 50% overlap
 
-    freq, psd = welch(data, fs=sampling_freq, scaling=scaling,
+    freq, psd = welch(data, fs=sampling_rate, scaling=scaling,
                       nperseg=nperseg, noverlap=noverlap, average='mean')
 
     if scaling == "density":

@@ -3,45 +3,2365 @@
   "features": [
     {
       "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
       "properties": {
         "Catchment": "Illgraben",
-        "Client": "High",
+        "Client": "GEOFON",
         "Network": "9J",
         "Station": "IGB02",
-        "Location": "empty",
-        "Component": "HHZ",
-        "Sampling Frequency [Hz]": 200,
-        "Distance to Channel [km]": 0.09,
-        "Data Uncertainty [freq]": "High",
-        "Data Uncertainty [time]": "High",
-        "Raw Data DOI [time]": "https://geofon.gfz-potsdam.de/doi/network/9J/2012",
-        "Related Papper DOI [time]": "https://geofon.gfz-potsdam.de/doi/network/9J/2012"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.62994, 46.2873]
+        "Component": "HHZ"
       }
     },
-
     {
       "type": "Feature",
-      "properties": {
-        "Catchment": "Wandong",
-        "Client": "High",
-        "Network": "AM",
-        "Station": "R9BF5",
-        "Location": "empty",
-        "Component": "EHZ",
-        "Sampling Frequency [Hz]": 200,
-        "Distance to Channel [km]": 0.16,
-        "Data Uncertainty [freq]": "High",
-        "Data Uncertainty [time]": "High",
-        "Raw Data DOI [time]": "https://geofon.gfz-potsdam.de/doi/network/9J/2012",
-        "Related Papper DOI [time]": "https://geofon.gfz-potsdam.de/doi/network/9J/2012"
-      },
       "geometry": {
         "type": "Point",
-        "coordinates": [102.140772999999, 29.5424879999999]
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "GEOFON",
+        "Network": "9J",
+        "Station": "IGB02",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL02",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL02",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL02",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL02",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL02",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "ETH",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "Private",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "Private",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "Private",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.62994,
+          46.2873
+        ]
+      },
+      "properties": {
+        "Catchment": "Illgraben",
+        "Client": "Private",
+        "Network": "9S",
+        "Station": "ILL12",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -119.6259,
+          34.4505
+        ]
+      },
+      "properties": {
+        "Catchment": "Montecito",
+        "Client": "SCEDC",
+        "Network": "CI",
+        "Station": "QAD",
+        "Component": "HNZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -111.6236,
+          35.2561
+        ]
+      },
+      "properties": {
+        "Catchment": "Museum_Fire",
+        "Client": "IRIS",
+        "Network": "1A",
+        "Station": "BOC2",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -111.6124,
+          35.257
+        ]
+      },
+      "properties": {
+        "Catchment": "Museum_Fire",
+        "Client": "IRIS",
+        "Network": "1A",
+        "Station": "E19A",
+        "Component": "CHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -111.6124,
+          35.257
+        ]
+      },
+      "properties": {
+        "Catchment": "Museum_Fire",
+        "Client": "IRIS",
+        "Network": "1A",
+        "Station": "E19A",
+        "Component": "CHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -111.6124,
+          35.257
+        ]
+      },
+      "properties": {
+        "Catchment": "Museum_Fire",
+        "Client": "IRIS",
+        "Network": "1A",
+        "Station": "E19A",
+        "Component": "CHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -106.18703,
+          38.73331
+        ]
+      },
+      "properties": {
+        "Catchment": "Chalk_Cliffs",
+        "Client": "IRIS",
+        "Network": "Y7",
+        "Station": "AV11",
+        "Component": "ELZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -106.18703,
+          38.73331
+        ]
+      },
+      "properties": {
+        "Catchment": "Chalk_Cliffs",
+        "Client": "IRIS",
+        "Network": "Y7",
+        "Station": "AV11",
+        "Component": "ELZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -106.18703,
+          38.73331
+        ]
+      },
+      "properties": {
+        "Catchment": "Chalk_Cliffs",
+        "Client": "Zenodo",
+        "Network": "ch",
+        "Station": "gpB",
+        "Component": "DHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -106.18703,
+          38.73331
+        ]
+      },
+      "properties": {
+        "Catchment": "Chalk_Cliffs",
+        "Client": "Zenodo",
+        "Network": "ch",
+        "Station": "gpB",
+        "Component": "DHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.6,
+          33.5
+        ]
+      },
+      "properties": {
+        "Catchment": "Goulinping",
+        "Client": "Zenodo",
+        "Network": "CC",
+        "Station": "ACT",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.6,
+          33.5
+        ]
+      },
+      "properties": {
+        "Catchment": "Goulinping",
+        "Client": "Zenodo",
+        "Network": "CC",
+        "Station": "ACT",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.6,
+          33.5
+        ]
+      },
+      "properties": {
+        "Catchment": "Goulinping",
+        "Client": "Zenodo",
+        "Network": "CC",
+        "Station": "ACT",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          104.6,
+          33.5
+        ]
+      },
+      "properties": {
+        "Catchment": "Goulinping",
+        "Client": "Zenodo",
+        "Network": "CC",
+        "Station": "ACT",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.555556,
+          31.23
+        ]
+      },
+      "properties": {
+        "Catchment": "Foutangba",
+        "Client": "Zenodo",
+        "Network": "MJ",
+        "Station": "FTB1",
+        "Component": "BHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.555556,
+          31.23
+        ]
+      },
+      "properties": {
+        "Catchment": "Foutangba",
+        "Client": "Zenodo",
+        "Network": "MJ",
+        "Station": "FTB1",
+        "Component": "BHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.433333,
+          31.128333
+        ]
+      },
+      "properties": {
+        "Catchment": "Ergou",
+        "Client": "Zenodo",
+        "Network": "MJ",
+        "Station": "EG2",
+        "Component": "BHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          103.134963,
+          26.248207
+        ]
+      },
+      "properties": {
+        "Catchment": "Jiangjia",
+        "Client": "Zenodo",
+        "Network": "DC",
+        "Station": "BL7",
+        "Component": "BHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.221703,
+          28.025101
+        ]
+      },
+      "properties": {
+        "Catchment": "Ramche",
+        "Client": "Zenodo",
+        "Network": "XF",
+        "Station": "H0390",
+        "Component": "BHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.92071,
+          27.90518
+        ]
+      },
+      "properties": {
+        "Catchment": "Bothekoshi",
+        "Client": "GEOFON",
+        "Network": "XN",
+        "Station": "NEP08",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          175.633,
+          -39.41
+        ]
+      },
+      "properties": {
+        "Catchment": "Ruapehu",
+        "Client": "Zenodo",
+        "Network": "MR",
+        "Station": "TRAN",
+        "Component": "BHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.309,
+          29.9796
+        ]
+      },
+      "properties": {
+        "Catchment": "Tianmo",
+        "Client": "Zenodo",
+        "Network": "CCDSN",
+        "Station": "G02",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.309,
+          29.9796
+        ]
+      },
+      "properties": {
+        "Catchment": "Tianmo",
+        "Client": "Zenodo",
+        "Network": "CCDSN",
+        "Station": "G02",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.309,
+          29.9796
+        ]
+      },
+      "properties": {
+        "Catchment": "Tianmo",
+        "Client": "Zenodo",
+        "Network": "CCDSN",
+        "Station": "G02",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.309,
+          29.9796
+        ]
+      },
+      "properties": {
+        "Catchment": "Tianmo",
+        "Client": "Zenodo",
+        "Network": "CCDSN",
+        "Station": "G02",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.309,
+          29.9796
+        ]
+      },
+      "properties": {
+        "Catchment": "Tianmo",
+        "Client": "Zenodo",
+        "Network": "CCDSN",
+        "Station": "G02",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.309,
+          29.9796
+        ]
+      },
+      "properties": {
+        "Catchment": "Tianmo",
+        "Client": "Zenodo",
+        "Network": "CCDSN",
+        "Station": "G02",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.309,
+          29.9796
+        ]
+      },
+      "properties": {
+        "Catchment": "Tianmo",
+        "Client": "Zenodo",
+        "Network": "CCDSN",
+        "Station": "G02",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.309,
+          29.9796
+        ]
+      },
+      "properties": {
+        "Catchment": "Tianmo",
+        "Client": "Zenodo",
+        "Network": "CCDSN",
+        "Station": "G02",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.309,
+          29.9796
+        ]
+      },
+      "properties": {
+        "Catchment": "Tianmo",
+        "Client": "Zenodo",
+        "Network": "CCDSN",
+        "Station": "G02",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.309,
+          29.9796
+        ]
+      },
+      "properties": {
+        "Catchment": "Tianmo",
+        "Client": "Zenodo",
+        "Network": "CCDSN",
+        "Station": "G02",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.309,
+          29.9796
+        ]
+      },
+      "properties": {
+        "Catchment": "Tianmo",
+        "Client": "Zenodo",
+        "Network": "CCDSN",
+        "Station": "G02",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.309,
+          29.9796
+        ]
+      },
+      "properties": {
+        "Catchment": "Tianmo",
+        "Client": "Zenodo",
+        "Network": "CCDSN",
+        "Station": "G02",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.309,
+          29.9796
+        ]
+      },
+      "properties": {
+        "Catchment": "Tianmo",
+        "Client": "Zenodo",
+        "Network": "CCDSN",
+        "Station": "G02",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          95.309,
+          29.9796
+        ]
+      },
+      "properties": {
+        "Catchment": "Tianmo",
+        "Client": "Zenodo",
+        "Network": "CCDSN",
+        "Station": "G02",
+        "Component": "SHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.8982,
+          40.7319
+        ]
+      },
+      "properties": {
+        "Catchment": "Casamicciola",
+        "Client": "INGV",
+        "Network": "IV",
+        "Station": "ICVJ",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          43.7615,
+          42.7397
+        ]
+      },
+      "properties": {
+        "Catchment": "Tbilisa",
+        "Client": "IRIS",
+        "Network": "GO",
+        "Station": "KHRT",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -152.76269,
+          60.49044
+        ]
+      },
+      "properties": {
+        "Catchment": "Redoubt",
+        "Client": "IRIS",
+        "Network": "AV",
+        "Station": "RDW",
+        "Component": "BHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -152.76269,
+          60.49044
+        ]
+      },
+      "properties": {
+        "Catchment": "Redoubt",
+        "Client": "IRIS",
+        "Network": "AV",
+        "Station": "RDW",
+        "Component": "BHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -152.76269,
+          60.49044
+        ]
+      },
+      "properties": {
+        "Catchment": "Redoubt",
+        "Client": "IRIS",
+        "Network": "AV",
+        "Station": "RDW",
+        "Component": "BHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -152.76269,
+          60.49044
+        ]
+      },
+      "properties": {
+        "Catchment": "Redoubt",
+        "Client": "IRIS",
+        "Network": "AV",
+        "Station": "RDW",
+        "Component": "BHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -152.76269,
+          60.49044
+        ]
+      },
+      "properties": {
+        "Catchment": "Redoubt",
+        "Client": "IRIS",
+        "Network": "AV",
+        "Station": "RDW",
+        "Component": "BHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -163.9706,
+          54.7566
+        ]
+      },
+      "properties": {
+        "Catchment": "Shishaldin",
+        "Client": "IRIS",
+        "Network": "AV",
+        "Station": "SSLS",
+        "Component": "BHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.6999,
+          45.3463
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Hood",
+        "Client": "IRIS",
+        "Network": "CC",
+        "Station": "PALM",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.6999,
+          45.3463
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Hood",
+        "Client": "IRIS",
+        "Network": "CC",
+        "Station": "PALM",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.6999,
+          45.3463
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Hood",
+        "Client": "IRIS",
+        "Network": "CC",
+        "Station": "PALM",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.6957,
+          45.3497
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Hood",
+        "Client": "IRIS",
+        "Network": "CC",
+        "Station": "PALM",
+        "Component": "BHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.81323,
+          46.81934
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Rainier",
+        "Client": "IRIS",
+        "Network": "UW",
+        "Station": "RER",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.81,
+          46.8191
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Rainier",
+        "Client": "IRIS",
+        "Network": "UW",
+        "Station": "RER",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.81,
+          46.8191
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Rainier",
+        "Client": "IRIS",
+        "Network": "UW",
+        "Station": "RER",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.8091,
+          46.8203
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Rainier",
+        "Client": "IRIS",
+        "Network": "UW",
+        "Station": "RER",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.19732,
+          41.39947
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "NC",
+        "Station": "LGB",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.1855,
+          41.3907
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "NC",
+        "Station": "LGY",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.1883,
+          41.3928
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "NC",
+        "Station": "LGY",
+        "Component": "HHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.2115,
+          41.4197
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "NC",
+        "Station": "LMP",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.1879,
+          41.4091
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "NC",
+        "Station": "LMP",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.2059,
+          41.4293
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "NC",
+        "Station": "LMP",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.1855,
+          41.3907
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "GM",
+        "Station": "LST4",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.1855,
+          41.3907
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "GM",
+        "Station": "LST4",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.1855,
+          41.3907
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "GM",
+        "Station": "LST4",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.1855,
+          41.3907
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "GM",
+        "Station": "LST4",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.1855,
+          41.3907
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "GM",
+        "Station": "LST4",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.1855,
+          41.3907
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "GM",
+        "Station": "LST4",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.1855,
+          41.3907
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "GM",
+        "Station": "LST4",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.1855,
+          41.3907
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "GM",
+        "Station": "LST4",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.1855,
+          41.3907
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "GM",
+        "Station": "LST4",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.2111,
+          41.4401
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "GM",
+        "Station": "LST2",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.1855,
+          41.3907
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Shasta",
+        "Client": "NCEDC",
+        "Network": "GM",
+        "Station": "LST4",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -152.16868,
+          61.22594
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Spurr",
+        "Client": "IRIS",
+        "Network": "AV",
+        "Station": "CKN",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -152.1687,
+          61.2259
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Spurr",
+        "Client": "IRIS",
+        "Network": "AV",
+        "Station": "CKN",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -152.1687,
+          61.2259
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_Spurr",
+        "Client": "IRIS",
+        "Network": "AV",
+        "Station": "CKN",
+        "Component": "EHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.191,
+          46.213
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_St_Helens",
+        "Client": "IRIS",
+        "Network": "CC",
+        "Station": "VALT",
+        "Component": "BHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.21442,
+          46.20508
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_St_Helens",
+        "Client": "IRIS",
+        "Network": "CC",
+        "Station": "VALT",
+        "Component": "BHZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.21442,
+          46.20508
+        ]
+      },
+      "properties": {
+        "Catchment": "Mount_St_Helens",
+        "Client": "IRIS",
+        "Network": "CC",
+        "Station": "VALT",
+        "Component": "BHZ"
       }
     }
   ]
