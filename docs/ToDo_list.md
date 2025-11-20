@@ -19,11 +19,11 @@ cd Flow-Bench
 ### 2. Create Conda Environment
 ```sh
 # QZ export his conda env from Glic by:
-# conda env export > Flow-Bnech-env.yml
+# conda env export > Flow-Bench-env.yml
 # then QZ manually ask ChatGPT to remove the Linux required packages
 
 # Create environment from config file
-conda env create -f config/Flow-Bnech-env.yml
+conda env create -f config/Flow-Bench-env.yml
 
 ```
 

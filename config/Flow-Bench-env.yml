@@ -1,0 +1,54 @@
+name: flow-bench
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # --- Core ---
+  - python=3.11
+  - pip
+
+  # --- Numerical / scientific ---
+  - numba=0.62.1
+  - numpy=1.26.4
+  - scipy=1.16.3
+  - pandas=2.2.3
+  - h5py
+  - statsmodels=0.14.6
+
+  # --- Seismology ---
+  - obspy=1.4.2
+
+  # --- Time series / distance ---
+  - dtaidistance=2.3.13
+  - joblib
+
+  # --- Visualization ---
+  - matplotlib=3.6.2
+  - seaborn
+  - plotly
+  - pillow
+  - fonttools
+
+  # --- GIS ---
+  - openpyxl
+  - geojson
+  - lxml
+
+  # --- Utilities ---
+  - tqdm
+  - requests
+  - psutil
+  - filelock
+  - packaging
+  - decorator
+  - networkx
+
+  # --- YAML ---
+  - pyyaml
+  - ruamel.yaml
+
+  # --- I/O ---
+  - zstandard
+  - py7zr
