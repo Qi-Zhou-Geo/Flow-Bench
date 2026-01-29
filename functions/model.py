@@ -156,7 +156,7 @@ class FlowBench:
         tr, nyq_freq = self.process_st(st, f_min, f_max)
         output_name = (f"{tr.stats.network}-{tr.stats.station}-{tr.stats.channel}"
                        f"-{window_size}-{window_overlap}-{denoising_method}-"
-                       f"{short_window}s-{long_window}s-{ratio_on}-{ratio_off}-{f_min}Hz-{f_max}Hz")
+                       f"{short_window}s-{long_window}s-{ratio_on}-{ratio_off}")
         self.output_name = output_name
         # double-check the params
         if window_size is None:
@@ -419,5 +419,6 @@ class FlowBench:
         ax2.set_xticks(x_location, x_ticks)
 
         plt.tight_layout()
-        plt.savefig(f"{current_dir}/Summary_{self.output_name}_{self.model_version}.png", dpi=600, transparent=True)
+        plt.savefig(f"{self.output_path}/Summary_{self.output_name}_{self.model_version}.png", dpi=600, transparent=True)
+        print(f"{self.output_path}/Summary_{self.output_name}_{self.model_version}.png")
         plt.show()

@@ -4,10 +4,10 @@ scipy==1.16.3
 pandas==2.2.3
 h5py
 statsmodels==0.14.6
-obspy==1.4.2
+obspy==1.4.0
 dtaidistance==2.3.13
 joblib
-matplotlib==3.6.2
+matplotlib==3.10.8
 seaborn
 plotly
 pillow

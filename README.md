@@ -37,7 +37,9 @@ visit the [Flow-Bench project page](https://qi-zhou-geo.github.io/Flow-Bench/).
 This version is backed up at [zenodo](https://doi.org/10.5281/zenodo.17432440).<br>
 
 ### 🚀 1. How to Use Our Pre-trained Models on Your Data?
-Check the [tutorial](demo/tutorial.ipynb) and run it on 
+1.1 Check the [prepare_env.md](docs/prepare_env.md) for setting up the Python environment in your local PC <br>
+1.2 Check the [tutorial](demo/tutorial.ipynb) for usage <br>
+1.3 Run the [tutorial](demo/tutorial.ipynb) on your local PC or on
 [![Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Qi-Zhou-Geo/Flow-Bench/blob/main/demo/tutorial.ipynb)
 
 ### ❓️2. Have Questions? <br>
