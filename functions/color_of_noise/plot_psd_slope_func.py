@@ -181,10 +181,19 @@ def plot_contour(ax, slope1, slope2, plot_legend=False):
 
     # plot
     contour = ax.contour(X, Y, Z, levels=levels, colors='black', linewidths=0.5, zorder=1)
-    p = contour.collections[0].get_paths()[0]
-    v = p.vertices  # Nx2 array of x,y points
-    x_vals = v[:, 0]
-    y_vals = v[:, 1]
+
+    # Force the figure to render (needed in Jupyter/inline backends)
+    ax.figure.canvas.draw()
+    # Use allsegs to get the contour paths safely
+    if contour.allsegs and len(contour.allsegs[0]) > 0:
+        # allsegs[0] is the first level, [0] is the first path
+        p= contour.allsegs[0][0]  # Nx2 array
+        x_vals = p[:, 0]
+        y_vals = p[:, 1]
+    else:
+        raise ValueError("No contour paths found. Check your data or levels.")
+
+
 
     x_min = x_vals.min()
     x_max = x_vals.max()
@@ -389,18 +398,31 @@ def plot_ILL_noise_model(ax, request_catchment="Illgraben", print_log=False):
     color_marker_label = mapping_color_marker_label()
     request_event_unique_list, request_event_id = select_event(request_catchment)
 
-    WSL_event = []
-    GFZ_event = []
 
-    for idx, unique_id in zip(request_event_id, request_event_unique_list):
-        freq, psd, psd_unit = load_cached_psd(idx)
+    # dump it
+    cache_file = Path(f"{project_root}/data/seismic_temp/npz/events_cache.npz")
+    if cache_file.exists():
+        # Load cached data
+        data = np.load(cache_file, allow_pickle=True)
+        WSL_event = data["WSL_event"].tolist()
+        GFZ_event = data["GFZ_event"].tolist()
+        freq = data["freq"].tolist()
+    else:
+        WSL_event = []
+        GFZ_event = []
 
-        if unique_id[:3] == "WSL":
-            WSL_event.append(psd)
-        elif unique_id[:3] == "GFZ":
-            GFZ_event.append(psd)
-        else:
-            print("Error! check the <plot_ILL_noise_model>")
+        for idx, unique_id in zip(request_event_id, request_event_unique_list):
+            freq, psd, psd_unit = load_cached_psd(idx)
+
+            if unique_id[:3] == "WSL":
+                WSL_event.append(psd)
+            elif unique_id[:3] == "GFZ":
+                GFZ_event.append(psd)
+            else:
+                print("Error! check the <plot_ILL_noise_model>")
+
+        np.savez_compressed(cache_file, WSL_event=WSL_event, GFZ_event=GFZ_event, freq=freq)
+
 
     plot_label = ["WSL-recorded\n(52 events)", "GFZ-labeled\n(14 events)"]
     colors = ["C2", "C0"]
@@ -538,3 +560,7 @@ def make_manual_legend_handles(mapping, alpha=0.5, edgecolor="black"):
         )
         handles.append(handle)
     return handles
+
+
+fig, ax = plt.subplots()
+plot_ILL_noise_model(ax)

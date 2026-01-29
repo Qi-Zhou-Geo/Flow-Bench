@@ -18,14 +18,14 @@ dependencies:
   - statsmodels=0.14.6
 
   # --- Seismology ---
-  - obspy=1.4.2
+  - obspy=1.4.0
 
   # --- Time series / distance ---
   - dtaidistance=2.3.13
   - joblib
 
   # --- Visualization ---
-  - matplotlib=3.6.2
+  - matplotlib=3.10.8
   - seaborn
   - plotly
   - pillow

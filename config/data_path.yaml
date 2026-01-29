@@ -21,4 +21,4 @@
 # seismic feature source on the GFZ-GLIC server
 seismic_feature_dir: "/storage/vast-gfz-hpc-01/home/qizhou/3paper/0seismic_feature"
 # event catalog
-event_catalog_version: "Flow_Bench_Catalog_work_v0dot8-12.txt"
+event_catalog_version: "Flow_Bench_Catalog_work_v0dot3.txt"
