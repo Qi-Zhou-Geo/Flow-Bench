@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # __modification time__ = 2025-01-20
-# __author__ = Qi Zhou and Sibashish Dash, GFZ Helmholtz Centre for Geosciences
+# __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
 
@@ -27,16 +27,17 @@ from obspy.core import UTCDateTime  # default is UTC+0 time zone
 
 from scipy.signal import hilbert
 
-# <editor-fold desc="add the sys.path to search for custom modules">
+# region ### add the sys.path to search for custom modules ###
+import sys
 from pathlib import Path
 
-current_dir = Path(__file__).resolve().parent
+current_file = Path(__file__).resolve()
+current_dir = current_file.parent
 # using ".parent" on a "pathlib.Path" object moves one level up the directory hierarchy
 project_root = current_dir.parent.parent
-import sys
 
 sys.path.append(str(project_root))
-# </editor-fold>
+# endregion
 
 # import the custom functions
 
@@ -98,7 +99,7 @@ sta_time = {"NEP08": "2016-07-05T15:16:27_2016-07-05T17:07:48",
 ## ------------------------ Step 2-1 ------------------------ ##
 from pipeline.fit_slope.psd_slope import plot_fitting, convert_st2psd
 from data.noise_model.visualize_noise_model import plot_Wolin2019_model, plot_standard_noise
-from functions.toolkit.multi_process_archive import dump_as_row
+from func.toolkit.multi_process_archive import dump_as_row
 
 f_min, f_max = 1, 50
 for idx, sta in enumerate(seismic_sta_list):
@@ -164,11 +165,11 @@ for idx, sta in enumerate(seismic_sta_list):
 # <editor-fold desc="Step 3-1">
 ## ------------------------ Step 3-1 ------------------------ ##
 import pickle
-from functions.seismic.signal_denoising import st_denoising
-from functions.seismic.generate_seismic_trace import create_trace
-from functions.seismic.st2tr import stream_to_trace
-from functions.dynamic_time_warping.dwt_warping import cluster_target, cluster_target_statis
-from functions.dynamic_time_warping.dwt_warping import min_max_normalize
+from func.seismic.signal_denoising import st_denoising
+from func.seismic.generate_seismic_trace import create_trace
+from func.seismic.st2tr import stream_to_trace
+from func.dynamic_time_warping.dwt_warping import cluster_target, cluster_target_statis
+from func.dynamic_time_warping.dwt_warping import min_max_normalize
 
 def plot_DWT_example(s1, s2, note1, note2):
 
@@ -322,8 +323,8 @@ plot_DWT_example(s1, s2, note1, note2)
 
 # # <editor-fold desc="Step 4-1">
 # ## ------------------------ Step 4-1 ------------------------ ##
-from functions.color_of_noise.plot_psd_slope_func import plot_contour
-from functions.color_of_noise.plot_psd_slope_func import plot_ILL_noise_model
+from func.color_of_noise.plot_psd_slope_func import plot_contour
+from func.color_of_noise.plot_psd_slope_func import plot_ILL_noise_model
 
 def plot_GLOG_slope(event_seperator=66, clip_min=0, clip_max=10):
 

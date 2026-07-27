@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # __modification time__ = 2025-01-20
-# __author__ = Qi Zhou and Sibashish Dash, GFZ Helmholtz Centre for Geosciences
+# __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
 
@@ -27,25 +27,26 @@ from obspy.core import UTCDateTime  # default is UTC+0 time zone
 
 from scipy.signal import hilbert
 
-# <editor-fold desc="add the sys.path to search for custom modules">
+# region ### add the sys.path to search for custom modules ###
+import sys
 from pathlib import Path
 
-current_dir = Path(__file__).resolve().parent
+current_file = Path(__file__).resolve()
+current_dir = current_file.parent
 # using ".parent" on a "pathlib.Path" object moves one level up the directory hierarchy
 project_root = current_dir.parent.parent
-import sys
 
 sys.path.append(str(project_root))
-# </editor-fold>
+# endregion
 
 # import the custom functions
-from functions.seismic.seismic_data_processing import load_seismic_signal
-from functions.seismic.st2tr import stream_to_trace
-from functions.seismic.plot_obspy_st import time_series_plot
-from functions.seismic.generate_seismic_trace import create_trace
-from functions.seismic.signal_denoising import st_denoising
-from functions.labeling_debris_flow.signal_sta_lta import sta_lta_timing
-from functions.seismic.plot_obspy_st import time_series_plot
+from func.seismic.seismic_data_processing import load_seismic_signal
+from func.seismic.st2tr import stream_to_trace
+from func.seismic.plot_obspy_st import time_series_plot
+from func.seismic.generate_seismic_trace import create_trace
+from func.seismic.signal_denoising import st_denoising
+from func.labeling_debris_flow.signal_sta_lta import sta_lta_timing
+from func.seismic.plot_obspy_st import time_series_plot
 
 dict_time = {
     # Illgraben

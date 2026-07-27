@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-#__modification time__ = Last modified: 2026-07-27T14:32:40
+#__modification time__ = 2025-09-08
 #__author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 #__find me__ = qi.zhou@gfz-potsdam.de, qi.zhou.geo@gmail.com, https://github.com/Nedasd
 # Please do not distribute this code without the author's permission
@@ -24,14 +24,14 @@ sys.path.append(str(project_root))
 
 
 
-def rewrite_geojson(project_root, data_version="v0dot8-12"):
+def catchment_code(project_root):
 
-    df = pd.read_csv(f"{project_root}/data/event_catalog/Flow_Bench_Catalog_work_{data_version}.txt", header=0)
+    df = pd.read_csv(f"{project_root}/data/event_catalog/Flow_Bench_Catalog_work.txt", header=0)
 
     features = []
     for _, row in df.iterrows():
         feature = geojson.Feature(
-            geometry=geojson.Point((row['Longitude-Station(-denote-West)'], row['Latitude-Station(-denote-South)'])),
+            geometry=geojson.Point((row['Longitude_sta'], row['Latitude'])),
             properties={
                 "Catchment": row['Catchment'],
                 "Client": row['Client'],
@@ -45,9 +45,9 @@ def rewrite_geojson(project_root, data_version="v0dot8-12"):
     feature_collection = geojson.FeatureCollection(features)
 
     # Write to data.geojson
-    with open(f"{project_root}/docs/data.geojson", "w", encoding="utf-8") as f:
+    with open(f"{project_root}/docs/data1.geojson", "w", encoding="utf-8") as f:
         geojson.dump(feature_collection, f, ensure_ascii=False, indent=2)
 
     print("data.geojson successfully created!")
 
-rewrite_geojson(project_root)
+catchment_code(project_root)

@@ -7,25 +7,19 @@
 # Please do not distribute this code without the author's permission
 
 import os
-import yaml
-
-import argparse
-
 import numpy as np
 import pandas as pd
 
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-# from brokenaxes import brokenaxes
+#from brokenaxes import brokenaxes
 
 from scipy.stats import linregress
 from scipy.stats import t as student_t  # Student's t-distribution
 from scipy.stats import gaussian_kde
 
-from obspy import Stream, Trace, read
-from obspy.core import UTCDateTime  # default is UTC+0 time zone
-
-from scipy.signal import hilbert
+from obspy import read
+from obspy.core import UTCDateTime # default is UTC+0 time zone
 
 # region ### add the sys.path to search for custom modules ###
 import sys
@@ -39,24 +33,43 @@ project_root = current_dir.parent.parent
 sys.path.append(str(project_root))
 # endregion
 
+
 # import the custom functions
 from func.seismic.st2tr import stream_to_trace
 from func.seismic.welch_spectrum import welch_psd
-from func.toolkit.multi_process_archive import dump_as_row
+from func.toolkit.confidence_level_test import statistical_testing
+from data.noise_model.visualize_noise_model import plot_Wolin2019_model, plot_standard_noise
+
+
+plt.rcParams.update( {'font.size':7,
+                      'font.family': "Arial",
+                      'axes.formatter.limits': (-4, 6),
+                      'axes.formatter.use_mathtext': True} )
+
+
+def load_pre_calculated_psd(event_id, project_root):
+
+    freq_npz_dir = f"{project_root}/data/seismic_temp/npz"
+    freq_npz_file = os.listdir(freq_npz_dir)
+    freq_npz_file.sort()
+    if ".DS_Store" in freq_npz_file:
+        freq_npz_file.remove(".DS_Store")
+
+    with np.load(f"{freq_npz_dir}/{freq_npz_file[event_id]}", allow_pickle=True) as f:
+        amp = f["freq"], f["psd"], f["psd_unit"]
+
+    return freq, psd, psd_unit
 
 def convert_st2psd(st):
-
     tr = stream_to_trace(st)
     data = tr.data
     sampling_rate = tr.stats.sampling_rate
-
     f_min = 1
     f_max = int(sampling_rate/2)
 
     freq, psd, psd_unit = welch_psd(data, sampling_rate, f_min, f_max, segment_window=10, scaling="density", unit_dB=True)
 
     return freq, psd, psd_unit
-
 
 def find_peak_freq(freq, psd):
 
@@ -79,7 +92,6 @@ def find_peak_freq(freq, psd):
     psd_right = psd[peak_freq_id:]
 
     return peak_freq, freq_left, psd_left, freq_right, psd_right
-
 
 def fit_color_of_noise(freq, psd, confidence_interval=0.95):
     '''
@@ -131,10 +143,11 @@ def fit_color_of_noise(freq, psd, confidence_interval=0.95):
 
     return beta, beta_CI, intercept, s_residual, r_squared, p_value
 
-
 def plot_fitting(ax, freq, psd, confidence_interval=0.95):
 
     colors = ["C0", "C1"]
+    temp = []
+
     peak_freq, freq1, psd1, freq2, psd2 = find_peak_freq(freq, psd)
 
 
@@ -174,13 +187,8 @@ def plot_fitting(ax, freq, psd, confidence_interval=0.95):
 
         ax.fill_between(freq_temp, ci_lower, ci_upper, color=colors[idx], alpha=0.5, zorder=4,
                         label=f"{confidence_interval} Confidence Interval")
-        
-        temp = [beta, beta_CI[0], beta_CI[1], intercept, s_residual, r_squared, p_value, peak_freq]
-        if idx == 0:
-            record = temp
-        else:
-            
-            record = record + temp
+
+        temp.append([beta, beta_CI, intercept, s_residual, r_squared, p_value, peak_freq])
 
     ax.vlines(x=peak_freq, ymin=-200, ymax=-60, zorder=1, color="green",
               label=f"Peak frequency {peak_freq:.2f} Hz")
@@ -192,7 +200,32 @@ def plot_fitting(ax, freq, psd, confidence_interval=0.95):
     handles, labels = ax.get_legend_handles_labels()
     unique_labels = dict(zip(labels, handles))
     ax.legend(unique_labels.values(), unique_labels.keys(),
-              loc="best", fontsize=6)
+              loc="upper left", fontsize=6)
 
-    return record
+    return temp
+
+
+st = read(f"{project_root}/data/seismic_temp/seis/018-European-Illgraben-9J-IGB02-HHZ.mseed")
+tr = st.copy()
+tr.trim(UTCDateTime("2014-07-12T14:58:01"), UTCDateTime("2014-07-12T15:36:35"))
+freq, psd, psd_unit = convert_st2psd(st=tr)
+
+freq_max = 50 # Hz
+index = np.where(freq>=freq_max)[0][0] + 1
+freq, psd = freq[:index], psd[:index]
+
+
+fig = plt.figure(figsize=(5, 5))
+gs = gridspec.GridSpec(1, 1)
+
+ax = plt.subplot(gs[0])
+plot_Wolin2019_model(ax, color="#D9544D", plot_type="area")
+plot_fitting(ax, freq, psd, confidence_interval=0.95)
+
+ax.set_xlabel("Frequency [Hz]", fontweight='bold')
+ax.set_ylabel("Power Spectral Density [dB]", fontweight='bold')
+
+plt.tight_layout()
+plt.savefig(f"/Users/qizhou/Desktop/fit-noise1.png", dpi=600, transparent=True)
+plt.show()
 

@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 # __modification time__ = 2025-01-20
-# __author__ = Qi Zhou and Sibashish Dash, GFZ Helmholtz Centre for Geosciences
+# __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
 
@@ -27,22 +27,23 @@ from obspy.core import UTCDateTime  # default is UTC+0 time zone
 
 from scipy.signal import hilbert
 
-# <editor-fold desc="add the sys.path to search for custom modules">
+# region ### add the sys.path to search for custom modules ###
+import sys
 from pathlib import Path
 
-current_dir = Path(__file__).resolve().parent
+current_file = Path(__file__).resolve()
+current_dir = current_file.parent
 # using ".parent" on a "pathlib.Path" object moves one level up the directory hierarchy
 project_root = current_dir.parent.parent
-import sys
 
 sys.path.append(str(project_root))
-# </editor-fold>
+# endregion
 
 # import the custom functions
 from pipeline.fit_slope.psd_slope import plot_fitting, convert_st2psd
 from data.noise_model.visualize_noise_model import plot_Wolin2019_model, plot_standard_noise
-from functions.toolkit.multi_process_archive import dump_as_row
-from functions.toolkit.arial_font import add_arial_font
+from func.toolkit.multi_process_archive import dump_as_row
+from func.toolkit.arial_font import add_arial_font
 # add the arial_font in Glic
 add_arial_font()
 

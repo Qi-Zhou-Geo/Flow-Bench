@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = 2025-05-12
+# __modification time__ = Last modified: 2026-07-27T14:29:47
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -13,14 +13,18 @@ import matplotlib.pyplot as plt
 from scipy.signal import savgol_filter
 from scipy.interpolate import interp1d
 
-# <editor-fold desc="add the sys.path to search for custom modules">
+# region ### add the sys.path to search for custom modules ###
+import sys
 from pathlib import Path
-current_dir = Path(__file__).resolve().parent
+
+current_file = Path(__file__).resolve()
+current_dir = current_file.parent
 # using ".parent" on a "pathlib.Path" object moves one level up the directory hierarchy
 project_root = current_dir.parent.parent
-import sys
+
 sys.path.append(str(project_root))
-# </editor-fold>
+# endregion
+
 
 
 plt.rcParams.update( {'font.size':7,
