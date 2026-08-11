@@ -1,0 +1,71 @@
+# Last modified: 2026-07-29T18:27:55
+# Author: Qi Zhou
+
+name: flowBench
+
+channels:
+  - conda-forge
+
+
+dependencies:
+  # Core
+  - python=3.14.6
+  - pip=26.1.2
+
+  # Scientific
+  - numpy=2.5.1
+  - scipy=1.18.0
+  - pandas=3.0.3
+  - xarray=2026.4.0
+
+
+  # Visualization
+  - seaborn=0.13.2
+  - matplotlib=3.11.1
+  - plotly=6.9.0
+
+
+  # I/O
+  - filelock=3.32.0
+  - openpyxl=3.1.5
+  - hdf5=2.1.0
+  - h5netcdf=1.8.1
+
+
+  # Seismology
+  - obspy=1.5.0
+
+
+  # GIS
+  - geojson=3.3.0
+  - geopandas=1.1.4
+  - rasterio=1.5.0
+  - pyproj=3.7.2
+  - whitebox=2.3.6
+  - pygmt=0.19.0
+  - shapely=2.1.2
+
+
+  # Download data
+  - requests
+  - paramiko
+
+
+  # Jupyter
+  - ipython
+  - jupyter_client
+  - jupyter_core
+  - ipykernel
+
+
+  # Utilities
+  - pyyaml
+  - yaml
+  - tqdm
+
+
+  # pip-only
+  - pip:
+    # DWT
+    - dtaidistance==2.4.0
+    - ruamel.yaml==0.19.1
