@@ -26,3 +26,8 @@ data/seismic
 data/seismic_temp
 
 pipeline/define_s_e/plots
+
+
+
+config/OpenTopography_key.yml
+data/raw_seis/
