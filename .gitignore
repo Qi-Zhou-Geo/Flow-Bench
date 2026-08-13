@@ -1,3 +1,6 @@
+# Last modified: 2026-08-14T00:48:28
+# Author: Qi Zhou
+
 ## how to use this?
 # 1, you alway need to add the "rules" first, then add/remove your file,
 #    the git will automatically ingore the "big/untracked"file
@@ -15,23 +18,15 @@ run_temp_test.sh
 .DS_Store
 .vscode
 
-# ingore the folder and all files
-functions/PPSD
-
-plotting
-
-
+######### geo branch ######### 
 config/OpenTopography_key.yml
+config/Zenodo_token.yml
+config/Nextcloud_key.yml
 
-# cached data
-data/event_catalog/old_version
-data/cooked_seis
-data/raw_seis
-data/raw_geo
-data/seismic_temp
+data/seis_raw
+data/seis_cooked
 
+data/geo_raw
+data/geo_cooked
 
-
-pipeline/define_s_e/plots2021
-pipeline/define_s_e/plots
-pipeline/glof_event/plots
+data/event_catalog/*.xlsx

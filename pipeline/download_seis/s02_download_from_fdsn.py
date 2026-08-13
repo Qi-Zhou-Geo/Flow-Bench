@@ -1,13 +1,13 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-14T00:31:16
+# __modification time__ = Last modified: 2026-08-14T00:47:11
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
 
-
-import pandas as pd
+import numpy as np
+from obspy import read, Stream, Inventory, read_inventory, UTCDateTime
 
 # region ### add the sys.path to search for custom modules ###
 import sys
@@ -21,15 +21,16 @@ project_root = current_dir.parent.parent
 sys.path.append(str(project_root))
 # endregion
 
+# import the custom functions
+from func.flow_bench.FlowBench import FlowBench
 
-def xlsx2txt(input_xlsx_path, output_txt_path, column_s, column_e):
+fb = FlowBench()
 
-    try:
-        usecols = list(range(column_s, column_e)) # select part of the columns
-        df = pd.read_excel(input_xlsx_path, engine='openpyxl', header=3, usecols=usecols)
-    except Exception as e:
-        raise ValueError(f"Exception error.\n{e}")
+fb.down_all_seis_data(buffer=1, data_source="FDSN")
 
-    df.to_csv(output_txt_path, index=False)
-    
-    return df
+
+seis_meta = fb.get_metadata(meta_type="seis", print_meta=False)
+event_meta = fb.get_metadata(meta_type="event", print_meta=False)
+st_raw, st_cooked = fb.request_one_seis_event(event_id=160)
+st_raw.plot() # type: ignore
+st_cooked.plot()

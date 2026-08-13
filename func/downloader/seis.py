@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-10T22:28:58
+# __modification time__ = Last modified: 2026-08-14T00:28:02
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -12,6 +12,8 @@ import pandas as pd
 
 from obspy.clients.fdsn import Client
 from obspy import read, Stream, Inventory, read_inventory, UTCDateTime
+
+import urllib.parse
 
 # region ### add the sys.path to search for custom modules ###
 import sys
@@ -26,16 +28,69 @@ sys.path.append(str(project_root))
 # endregion
 
 # import the custom functions
-from func.seismic.round_time import round_time
-from data.meta.seis.paz_meta import load_paz
+from data.meta.paz_meta import load_paz
+from func.downloader.nextcloud import data_exchange
+from func.toolkit.load_key import load_nextcloud_key
+
+def load_raw_glic(continent, seis_cat, 
+                  seis_client, seis_network, 
+                  seis_station, seis_location, seis_channel,
+                  seis_response, sensor_type,
+                  starttime, endtime,
+                  save=False,
+                  local_dir=f"data/seis_raw"
+                  ):
+    
+    project_root_glic = Path("/storage/vast-gfz-hpc-01/project/seismic_data_qi/seismic")
+
+    year = UTCDateTime(starttime).year
+    julday = UTCDateTime(starttime).julday
+    sub_folder = f"{continent}/{seis_cat}/{year}/{seis_station}/{seis_channel}"
+    file_name = f"{seis_network}.{seis_station}.{seis_channel}.{year}.{julday:03d}.mseed"
+    
+    
+    st_path = Path(project_root_glic) / sub_folder / file_name
+    st_raw = read(st_path)
+    
+    if save is True:
+        st_path = Path(project_root) / local_dir / sub_folder / file_name
+        st_path.parent.mkdir(parents=True, exist_ok=True)
+        st_raw.write(st_path, format="MSEED")
+
+    
+    if seis_response == "xml":
+        inv_path = Path(project_root_glic) / f"{continent}/{seis_cat}/meta_data"
+        inv_path_files = os.listdir(inv_path)
+        
+        inv_or_paz = Inventory(networks=[], source="merged_inventory")
+        for i in inv_path_files:
+            if i.lower().endswith(".xml"):
+                i_path = Path(inv_path) / i
+                inv_or_paz = inv_or_paz + read_inventory(i_path)
+        
+        if save is True:
+            inv_path = Path(project_root) / local_dir / f"{continent}/{seis_cat}" / "inventory.xml"
+            inv_path.parent.mkdir(parents=True, exist_ok=True)
+            inv_or_paz.write(inv_path, format="STATIONXML")
+    else: 
+        inv_or_paz = None
+
+
+    return st_raw, inv_or_paz
+
 
 def load_raw_fdsn(continent, seis_cat, 
                   seis_client, seis_network, 
                   seis_station, seis_location, seis_channel,
                   seis_response, sensor_type,
                   starttime, endtime,
+                  save=False,
+                  local_dir=f"data/seis_raw"
                   ):
     
+    if pd.isna(seis_location) is True:
+        seis_location = ""
+        
     client = Client(seis_client)
     st_raw = client.get_waveforms(network=seis_network, 
                                   station=seis_station,
@@ -45,10 +100,8 @@ def load_raw_fdsn(continent, seis_cat,
                                   endtime=endtime,
                                   attach_response=True)
     
-
+    # gets all available station metadata
     inv_or_paz = client.get_stations(
-        starttime=starttime, 
-        endtime=endtime,
         network=seis_network, 
         station=seis_station,
         location=seis_location, 
@@ -56,6 +109,23 @@ def load_raw_fdsn(continent, seis_cat,
         level="response",
         format="xml",
     )
+    
+    if save is True:
+        year = UTCDateTime(starttime).year
+        julday = UTCDateTime(starttime).julday
+        sub_folder = f"{continent}/{seis_cat}/{year}/{seis_station}/{seis_channel}"
+        file_name = f"{seis_network}.{seis_station}.{seis_channel}.{year}.{julday:03d}.mseed"
+
+        st_path = Path(project_root) / local_dir / sub_folder / file_name
+        st_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        assert st_raw is not None
+        st_raw.write(st_path, format="MSEED")
+        
+        inv_path = Path(project_root) / local_dir / f"{continent}/{seis_cat}" / "inventory.xml"
+        inv_path.parent.mkdir(parents=True, exist_ok=True)
+        assert inv_or_paz is not None
+        inv_or_paz.write(inv_path, format="STATIONXML")
     
     return st_raw, inv_or_paz
 
@@ -65,11 +135,13 @@ def load_raw_zenodo(continent, seis_cat,
                   seis_station, seis_location, seis_channel,
                   seis_response, sensor_type,
                   starttime, endtime,
+                  save=False,
+                  local_dir=f"data/seis_raw"
                   ):
 
     # set path
     year = UTCDateTime(starttime).year
-    sub_folder = f"data/raw_seis/{continent}/{seis_cat}/{year}/{seis_station}/{seis_channel}"
+    sub_folder = f"{continent}/{seis_cat}/{year}/{seis_station}/{seis_channel}"
     raw_st_dir = Path(project_root) / sub_folder
     all_mseed = os.listdir(raw_st_dir)
 
@@ -77,7 +149,7 @@ def load_raw_zenodo(continent, seis_cat,
     st_raw = Stream()
     for file_name in all_mseed:
         if file_name.lower().endswith(".mseed"):
-            raw_st_path = Path(project_root) / sub_folder / file_name
+            raw_st_path = Path(project_root) / local_dir / sub_folder / file_name
             st_raw = st_raw = read(raw_st_path)
 
     st_raw.merge(method=1, fill_value='latest', interpolation_samples=0)
@@ -98,20 +170,72 @@ def load_raw_zenodo(continent, seis_cat,
 
     # load inv
     if seis_response.lower() == "xml":
-        inv_or_paz = None
-
-        inv_dir = Path(project_root) / f"data/raw_seis/{continent}/{seis_cat}"
-        all_inv_dir = os.listdir(inv_dir)
-
-        for file_name in all_inv_dir:
-            if file_name.lower().endswith("xml"):
-                inv_or_paz = read_inventory(f"{inv_dir}/{file_name}")
+        inv_dir = Path(project_root) / local_dir / f"{continent}/{seis_cat}" / "inventory.xml"
+        inv_or_paz = read_inventory(inv_dir)
 
     elif seis_response.lower() in ["simulate", "manually", "do-not-need"]:
-        inv_or_paz = load_paz(sensor_type) # retuen None incase there is no metadata
-
+        inv_or_paz = load_paz(sensor_type)
     else:
         raise ValueError(f"Unsupported <seis_response>: {seis_response}, <sensor_type>: {sensor_type}")
+
+    return st_raw, inv_or_paz
+
+
+def load_raw_nextcloud(continent, seis_cat,
+                       seis_client, seis_network,
+                       seis_station, seis_location, seis_channel,
+                       seis_response, sensor_type,
+                       starttime, endtime,
+                       save=False,
+                       local_dir="data/seis_raw"):
+
+    base_url, share_token, pass_word = load_nextcloud_key(key_name="Nextcloud_key.yml")
+    
+    year = UTCDateTime(starttime).year
+    julday = UTCDateTime(starttime).julday
+    sub_folder = f"{continent}/{seis_cat}/{year}/{seis_station}/{seis_channel}"
+    file_name = f"{seis_network}.{seis_station}.{seis_channel}.{year}.{julday:03d}.mseed"
+    
+    st_path = Path(project_root) / local_dir / sub_folder / file_name
+    local_file_path = st_path
+    
+    try:
+        st_raw = read(local_file_path)
+    except FileNotFoundError:
+        remote_file_path = f"{sub_folder}/{file_name}"
+        remote_file_url = f"{base_url.rstrip('/')}/{urllib.parse.quote(remote_file_path, safe='/')}"
+
+        data_exchange(
+            purpose="download",
+            local_file_path=local_file_path,
+            remote_sub_folder_url=None,
+            remote_file_url=remote_file_url,
+            share_token=share_token,
+            pass_word=pass_word,
+        )
+        
+        st_raw = read(local_file_path)
+    except Exception as e:
+        raise ValueError(f"Exception error.\n{e}")
+    
+    
+    if seis_response == "xml":
+        inv_local_path = Path(project_root) / local_dir / continent / seis_cat / "inventory.xml"
+        inv_remote_path = f"{continent}/{seis_cat}/inventory.xml"
+        inv_remote_url = f"{base_url.rstrip('/')}/{urllib.parse.quote(inv_remote_path, safe='/')}"
+
+        data_exchange(
+            purpose="download",
+            local_file_path=inv_local_path,
+            remote_sub_folder_url=None,
+            remote_file_url=inv_remote_url,
+            share_token=share_token,
+            pass_word=pass_word,
+        )
+
+        inv_or_paz = read_inventory(inv_local_path)
+    else:
+        inv_or_paz = load_paz(sensor_type)
 
     return st_raw, inv_or_paz
 
@@ -143,27 +267,19 @@ def cooking_recipe(st, inv_or_paz, f_min=1, f_max=25):
     return st_copy
 
 
-def download_seis(continent, seis_cat, 
-                  seis_client, seis_network, 
-                  seis_station, seis_location, seis_channel,
-                  seis_response, sensor_type,
-                  starttime, endtime,
-                  
-                  buffer_time=3,
-                  f_min=1, f_max=25,
-                  ):
+def get_seis(continent, seis_cat, 
+             seis_client, seis_network, 
+             seis_station, seis_location, seis_channel,
+             seis_response, sensor_type,
+             starttime, endtime,
+             f_min=1, f_max=25,
+             ):
 
-    starttime = UTCDateTime(starttime) - buffer_time * 3600
-    starttime = UTCDateTime(round_time(starttime))
-    
-    endtime = UTCDateTime(endtime) + buffer_time * 3600
-    endtime = UTCDateTime(round_time(endtime))
-    
     if pd.isna(seis_location) is True:
         seis_location = ""
     
     if seis_client in ["Private", "Zenodo"]:
-        st_raw, inv_or_paz = load_raw_zenodo(continent, seis_cat, 
+        st_raw, inv_or_paz = load_raw_nextcloud(continent, seis_cat, 
                   seis_client, seis_network, 
                   seis_station, seis_location, seis_channel,
                   seis_response, sensor_type,

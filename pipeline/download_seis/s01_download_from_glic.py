@@ -1,12 +1,13 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-09T15:26:43
+# __modification time__ = Last modified: 2026-08-13T16:49:37
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
 
-import yaml
+import numpy as np
+from obspy import read, Stream, Inventory, read_inventory, UTCDateTime
 
 # region ### add the sys.path to search for custom modules ###
 import sys
@@ -20,8 +21,8 @@ project_root = current_dir.parent.parent
 sys.path.append(str(project_root))
 # endregion
 
-def default_params():
-    key_path = Path(project_root) / f"data/meta/dem/{seis_cat}_{dem_resolution}.yml"
-    with open(key_path, "r") as f:
-        config = yaml.safe_load(f)
-        
+# import the custom functions
+from func.flow_bench.FlowBench import FlowBench
+
+fb = FlowBench()
+fb.down_all_seis_data(buffer=2, data_source="GLIC")

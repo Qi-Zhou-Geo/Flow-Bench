@@ -1,5 +1,5 @@
 ```sh
-# Last Update: Last modified: 2026-07-27T14:28:17
+# Last Update: Last modified: 2026-08-14T01:01:04
 # Author: Qi Zhou
 ```
 
@@ -36,6 +36,6 @@ mamba env create -f config/environment.yml
 
 ### 3. Activate the environment
 ```sh
-mamba activate your-env-name
+mamba activate flowBench
 ```
 ---
