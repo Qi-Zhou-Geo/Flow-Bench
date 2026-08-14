@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-#__modification time__ = Last modified: 2026-08-13T13:50:09
+#__modification time__ = Last modified: 2026-08-14T09:59:48
 #__author__ = Qi Zhou, Helmholtz Centre Potsdam - GFZ German Research Centre for Geosciences
 #__find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Nedasd
 # Please do not distribute this code without the author's permission
