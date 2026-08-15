@@ -24,6 +24,8 @@ plotting
 
 data/seismic
 data/seismic_temp
+data/event_catalog/old_version
+data/raw_geo/Illgraben
 
 pipeline/define_s_e/plots
 

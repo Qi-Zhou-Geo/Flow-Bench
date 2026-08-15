@@ -186,8 +186,6 @@ def merge_stationxml(output_folder):
 def main(output_folder=None,
          zenodo_url="https://zenodo.org/record/17432440/files/seismic.7z"):
 
-    # Download the all raw data from "Flow-Bench" archive.
-    #zenodo_url= "https://zenodo.org/records/17432440?token=eyJhbGciOiJIUzUxMiIsImlhdCI6MTc2MTMxNzMyOSwiZXhwIjoxNzYxMzUwMzk5fQ.eyJpZCI6IjkwZmYzN2VkLWU4ODQtNDRkYi1iYzJkLTI4MzlmNzQwNGMzNSIsImRhdGEiOnt9LCJyYW5kb20iOiJlZjZjZGU4ZWQxODZiMmY3Mjc0NDBmYTlmMjJkNTc2ZiJ9.4Vir3SjrVgp6vL-1hzmuxXq-nGBkuapZ8t2wWAAtbzNxc7DcUJDNoECSoJoJjeeKEJyn8K5CqjGzhFPykhJhwg"
 
     from pathlib import Path
     current_dir = Path(__file__).resolve().parent
