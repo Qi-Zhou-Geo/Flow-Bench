@@ -1,4 +1,4 @@
-# Last modified: 2026-08-14T00:48:28
+# Last modified: 2026-08-17T12:16:04
 # Author: Qi Zhou
 
 ## how to use this?
@@ -30,3 +30,7 @@ data/geo_raw
 data/geo_cooked
 
 data/event_catalog/*.xlsx
+data/event_catalog/*.txt
+
+
+plots

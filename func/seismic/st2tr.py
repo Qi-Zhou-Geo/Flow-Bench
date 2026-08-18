@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-14T09:59:29
+# __modification time__ = Last modified: 2026-08-16T16:45:59
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -13,7 +13,6 @@ from obspy import Stream, Trace
 def stream_to_trace(st):
 
     if isinstance(st, Stream):
-
         if len(st) == 0:
             raise ValueError("Stream is empty, cannot convert to Trace")
         elif len(st) > 1:

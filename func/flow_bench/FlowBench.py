@@ -1,21 +1,12 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-14T00:53:06
+# __modification time__ = Last modified: 2026-08-18T16:55:53
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
 
-import os
-import yaml
-
-import numpy as np
-import pandas as pd
-
-from tqdm import tqdm
-
-from obspy import UTCDateTime, read, Stream, read_inventory
-
+from obspy import UTCDateTime
 
 # region ### add the sys.path to search for custom modules ###
 import sys
@@ -31,278 +22,254 @@ sys.path.append(str(project_root))
 
 
 # import the custom functions
-from func.downloader.xlsx_to_txt import xlsx2txt
-from func.downloader.dem import download_dem
-from func.downloader.seis import get_seis, cooking_recipe
-from func.downloader.seis import load_raw_glic, load_raw_fdsn, load_raw_zenodo, load_raw_nextcloud
-from func.toolkit.logger_printer import setup_logger
-from func.seismic.round_time import round_time
-from data.meta.paz_meta import load_paz
+# for metadata
+from func.toolkit.xlsx_to_txt import xlsx2txt
+
+# for download
+from func.download.seis_wrapper import all_seis_data, one_seis_event
+
+# for STA/LTA
+from func.seismic.denoising import denoise_st
+from func.sta_lta.forward_backward import forward_backward_sta_lta
+from func.sta_lta.post_process import plot_sta_lta
+
 
 class FlowBench:
+    def __init__(self, version):
 
-    def __init__(self,
-                 version="v2dot1dot1",
-                 project_root=None,
-                 min_storage=1):
-
-        # specific the data version
+        # model version, e.g., "v2dot1dot1"
         self.version = version
 
         # I/O dir
-        self.project_root = project_root
-        self.min_storage = min_storage
+        self.project_root = project_root  # project root directory
+        print(f"Note! Your working <project_root> is: {project_root}")
 
-        # func
-        self.download_dem = download_dem
+        # general parameters
+        self.buffer_day = 1  # number of days before and after the event for data download
+        self.buffer_hour = 3  # number of hours before and after the event for event-level analysis
+        self.window_size = 10  # window length in seconds
+        self.window_overlap = 0  # window overlap ratio; 0 means no overlap
+        self.fmt = "%Y-%m-%dT%H:%M:%S"  # datetime string format
 
-        # paramsters
-        self.buffer_time = 3 # how long beyond event do you need
-        
-        # setup logger
-        # output_dir = Path(project_root) / "data/seis_raw"
-        # log_filename = "archive_glic.log"
-        # logger = setup_logger(output_dir=output_dir, log_filename=log_filename, force_reset=True)
-        # msg = f"Download raw seismic data and seismic inventory (if available) from GLIC to the local PC.\n\n"
-        # logger.info(msg)
+        # seismic preprocessing parameters
+        self.f_min = 1  # lower cutoff frequency in Hz
+        self.f_max = 25  # upper cutoff frequency in Hz
+
+        # STA/LTA event timing parameters
+        self.sta = 180  # short-term average window length in seconds
+        self.lta = 1800  # long-term average window length in seconds
+        self.thr_on = 0.2  # trigger-on threshold
+        self.thr_off = 0.2  # trigger-off threshold
+        self.min_event_duration = 60  # minimum event duration in seconds
 
     def get_metadata(self, meta_type, print_meta=True):
 
-        meta_xlsx = Path(project_root) / f"data/event_catalog/Flow_Bench_Catalog_{self.version}.xlsx"
-        meta_txt = Path(project_root) / f"data/event_catalog/Flow_Bench_Catalog_{self.version}.txt"
+        meta_xlsx = Path(self.project_root) / f"data/event_catalog/Flow_Bench_Catalog_{self.version}.xlsx"
+        meta_txt = Path(self.project_root) / f"data/event_catalog/Flow_Bench_Catalog_{self.version}.txt"
 
         if meta_type == "all":
             column_s, column_e = 17, 19
-        elif meta_type == "seis":
-            column_s, column_e = 0, 12
-        elif meta_type == "dem":
+        elif meta_type == "seis" or meta_type == "dem":
             column_s, column_e = 0, 12
         elif meta_type == "event":
             column_s, column_e = 17, 19
         else:
-            raise ValueError(f"Unsupported meta_type: {meta_type}")  
+            raise ValueError(f"Unsupported meta_type: {meta_type}")
 
-        df_meta = xlsx2txt(input_xlsx_path=meta_xlsx, 
-                           output_txt_path=meta_txt, 
-                           column_s=column_s, column_e=column_e)
-        
+        df_meta = xlsx2txt(input_xlsx_path=meta_xlsx, output_txt_path=meta_txt, column_s=column_s, column_e=column_e)
+
         if print_meta is True:
-            print(f"Flow-Bnech Metadata\n"
-                  f"Num of rows: {len(df_meta.index)}\n"
-                  f"Name of columns: {df_meta.columns}\n\n")
+            print(f"Flow-Bnech Metadata\nNum of rows: {len(df_meta.index)}\nName of columns: {df_meta.columns}\n\n")
 
         return df_meta
 
     def get_dem(self, seis_cat, dem_resolutio):
 
         # from seis_cat to the meta
-        dem = self.download_dem(seis_cat, dem_resolutio)
+        dem = 1  # download_dem(seis_cat, dem_resolutio)
 
         return dem
 
+    def down_all_seis_data(self, buffer_day=None, data_source="FDSN"):
 
-    def down_all_seis_data(self, buffer=2, data_source="FDSN"):
-        """
-        Download the alll debris-flow seismic records.
-        
-        Args:
-            buffer (int, optional): Number of Julian days to extend around each event.
-                For example, if an event occurs on Julian day j and buffer=1,
-                data from Julian days [j-1, j, j+1] will be downloaded.
-                
-                Note: Zenodo or private data sources may not include this full time range, 
-                because the original released data may be shorter.
-                
-                Defaults to 1.
-                
-            data_source (str, optional): Data source to use. Options are "FDSN", "Zenodo", or "GLIC".
-                "FDSN" denotes data hosted on an FDSN server.
-                "Zenodo" and "GLIC" denote data from peer-reviewed papers,
-                which are archived either on the GFZ GLIC server or in publicly accessible Zenodo repositories.
-                
-                Defaults to "FDSN".
-        """
-        
-        seis_meta = self.get_metadata(meta_type="seis")
-        event_meta = self.get_metadata(meta_type="event")
-        client_arr = np.array(seis_meta["seis_client"])
-        
-        if data_source == "FDSN":
-            down_func = load_raw_fdsn
-            keep_idx = ~np.isin(client_arr, ["Zenodo", "Private"])
-            
-            msg = f"Note! You may need 4.5 Gb space to save the data from <data_source>={data_source}\n\n."
-            print(msg)
-        elif data_source in ["Zenodo", "Nextcloud"]:
-            down_func = load_raw_nextcloud #load_raw_zenodo
-            keep_idx = np.isin(client_arr, ["Zenodo", "Private"])
-            
-            msg = f"Note! You may need 4.5 Gb space to save the data from <data_source>={data_source}\n\n."
-            print(msg)
-        elif data_source == "GLIC":
-            down_func = load_raw_glic
-            keep_idx = np.isin(client_arr, ["Zenodo", "Private"])
-            
-            msg = "Warning! Only the development team is allowed to run this step."
-            print(msg)
-        
-            msg = f"Download raw seismic data and seismic inventory (if available) from GLIC to the local PC.\n\n"
-            print(msg)
-            
-            msg = f"Note! You may need 4.5 Gb space to save the data from <data_source>={data_source}\n\n."
-            print(msg)
-            
-        else:
-            raise ValueError(f"Unsupported <data_source>: {data_source}")
-
-
-
-        seis_meta = seis_meta.loc[keep_idx].reset_index(drop=True)
-        event_meta = event_meta.loc[keep_idx].reset_index(drop=True)
-        client_list = np.unique(seis_meta["seis_client"]).tolist()
-        total_inter = len(seis_meta)
-        
-        for event_id in tqdm(range(total_inter), 
-                             desc=f"Downing data from {data_source}",
-                             total=total_inter,
-                             file=sys.stdout):
-            
-            seis_client = seis_meta["seis_client"][event_id]
-            if seis_client in client_list:
-                
-                # region 
-                # catchment meta
-                continent = seis_meta["continent"][event_id]
-                seis_cat = seis_meta["seis_cat"][event_id]
-
-                # seismic meta
-                seis_client = seis_meta["seis_client"][event_id]
-                seis_network = seis_meta["seis_network"][event_id]
-                seis_station = str(seis_meta["seis_station"][event_id])
-                seis_location = seis_meta["seis_location"][event_id]
-                seis_channel = seis_meta["seis_channel"][event_id]
-                seis_response = seis_meta["seis_response"][event_id]
-                sensor_type = seis_meta["seis_sensor"][event_id]
-
-                # event meta
-                event_t_s = event_meta["event_time_s"][event_id]
-                event_t_e = event_meta["event_time_e"][event_id]
-                # endregion
-                
-                year = UTCDateTime(event_t_s).year
-                julday = UTCDateTime(event_t_s).julday
-                julday_list = np.arange(julday - buffer, julday + buffer + 1)
-                
-                for j in julday_list:
-                    starttime = UTCDateTime(year=year, julday=j)
-                    endtime = UTCDateTime(year=year, julday=j) + 24 * 3600
-                    
-                    try:
-                        down_func(continent, seis_cat, 
-                                  seis_client, seis_network, 
-                                  seis_station, seis_location, seis_channel,
-                                  seis_response, sensor_type,
-                                  starttime, endtime,
-                                  save=True)
-
-                    except Exception as e:
-                        msg = (f"Warning! There are not enough data at: {seis_client}.\n"
-                            f"{e}\n"
-                            f"{continent}-{seis_cat}-{seis_client}-{seis_network}-{seis_station}-{seis_location}-{seis_channel}\n"
-                            f"Data is not available: {starttime} to {endtime}.\n\n")
-                        print(msg)
-
-
-    def request_one_seis_event(self, event_id, 
-                               starttime=None, endtime=None, 
-                               buffer_h=3,
-                               f_min=1, f_max=25):
-
+        # (1) load the meta
         seis_meta = self.get_metadata(meta_type="seis", print_meta=False)
         event_meta = self.get_metadata(meta_type="event", print_meta=False)
 
-        # region 
-        # catchment meta
-        continent = seis_meta["continent"][event_id]
-        seis_cat = seis_meta["seis_cat"][event_id]
+        # (2) check the parameters
+        if buffer_day is None:
+            buffer_day = self.buffer_day
 
-        # seismic meta
-        seis_client = seis_meta["seis_client"][event_id]
-        seis_network = seis_meta["seis_network"][event_id]
-        seis_station = str(seis_meta["seis_station"][event_id])
-        seis_location = seis_meta["seis_location"][event_id]
-        seis_channel = seis_meta["seis_channel"][event_id]
-        seis_response = seis_meta["seis_response"][event_id]
-        sensor_type = seis_meta["seis_sensor"][event_id]
+        all_seis_data(
+            seis_meta=seis_meta,
+            event_meta=event_meta,
+            buffer=buffer_day,
+            data_source=data_source,
+        )
 
-        # event meta
+    def request_one_seis_event(self, event_id, starttime=None, endtime=None, buffer_hour=None, f_min=None, f_max=None):
+
+        # (1) load the meta
+        seis_meta = self.get_metadata(meta_type="seis", print_meta=False)
+        event_meta = self.get_metadata(meta_type="event", print_meta=False)
+
+        # (2) check the parameters
+        if buffer_hour is None:
+            buffer_hour = self.buffer_hour
+
         if starttime is None:
-            starttime = UTCDateTime(event_meta["event_time_s"][event_id]) - buffer_h * 3600
-            
-        if endtime is None:
-            endtime = UTCDateTime(event_meta["event_time_e"][event_id]) + buffer_h * 3600
-            
-        starttime = UTCDateTime(round_time(starttime))
-        endtime = UTCDateTime(round_time(endtime))
-        # endregion
-        
-        # rquest data
-        try:
-            # (1) try to load the local cache first
-            local_dir = f"data/seis_raw"
-            st_raw = Stream()
-            
-            for julday in range(UTCDateTime(starttime).julday, UTCDateTime(endtime).julday + 1):
-                year = UTCDateTime(starttime).year
-                
-                sub_folder = f"{continent}/{seis_cat}/{year}/{seis_station}/{seis_channel}"
-                file_name = f"{seis_network}.{seis_station}.{seis_channel}.{year}.{julday:03d}.mseed"
-                st_raw_path = Path(project_root) / local_dir / sub_folder / file_name
-                
-                st_raw = st_raw + read(st_raw_path)
-            
-            if seis_response == "xml":
-                inv_path = Path(project_root) / local_dir / f"{continent}/{seis_cat}" / "inventory.xml"
-                inv_or_paz = read_inventory(inv_path)
-            else:
-                inv_or_paz = load_paz(sensor_type=sensor_type)
-            
-            
-            st_cooked = cooking_recipe(st=st_raw, inv_or_paz=inv_or_paz, f_min=f_min, f_max=f_max)
-        except FileNotFoundError:
-            # (2) if there is no cache, then request the data
-            st_raw, st_cooked= get_seis(continent, seis_cat, 
-                  seis_client, seis_network, 
-                  seis_station, seis_location, seis_channel,
-                  seis_response, sensor_type,
-                  starttime, endtime,
-                  f_min=f_min, f_max=f_max)
+            starttime = UTCDateTime(event_meta["event_time_s"][event_id]) - buffer_hour * 3600
 
-        except Exception as e:
-            # (3) Unknow error
-            raise ValueError(f"Exception error.\n{e}")
-        
-        st_raw.trim(starttime=starttime, endtime=endtime) # type: ignore
-        st_cooked.trim(starttime=starttime, endtime=endtime)
-        
+        if endtime is None:
+            endtime = UTCDateTime(event_meta["event_time_e"][event_id]) + buffer_hour * 3600
+
+        if f_min is None:
+            f_min = self.f_min
+
+        if f_max is None:
+            f_max = self.f_max
+
+        # (3) request the data
+        st_raw, st_cooked = one_seis_event(
+            seis_meta=seis_meta,
+            event_meta=event_meta,
+            event_id=event_id,
+            starttime=starttime,
+            endtime=endtime,
+            f_min=f_min,
+            f_max=f_max,
+        )
+
         return st_raw, st_cooked
 
+    def get_event_t(
+        self,
+        # obspy stream
+        st,
+        # denoise
+        window_size=None,
+        window_overlap=None,
+        denoising_method=None,
+        # STA-LTA
+        sta=None,
+        lta=None,
+        thr_on=None,
+        thr_off=None,
+        # default params
+        smooth_sec=None,
+        min_event_duration=None,
+        # plot and save
+        show_plot=True,
+        save_plot=False,
+        event_id=None,
+    ):
 
-    def get_event_t(self, st):
-        pass
+        # (1) check the parameters
+        # region
+        if window_size is None:
+            window_size = self.window_size
+
+        if window_overlap is None:
+            window_overlap = self.window_overlap
+
+        if denoising_method is None:
+            denoising_method = "RMS"
+
+        if sta is None:
+            sta = self.sta
+
+        if lta is None:
+            lta = self.lta
+
+        if thr_on is None:
+            thr_on = self.thr_on
+
+        if thr_off is None:
+            thr_off = self.thr_off
+
+        if smooth_sec is None:
+            pass
+
+        if min_event_duration is None:
+            min_event_duration = self.min_event_duration
+        # endregion
+
+        # (2) denoise it
+        st_copy = st.copy()
+        low_sampling_rate, denoised_st = denoise_st(
+            st=st_copy,
+            window_size=window_size,
+            window_overlap=window_overlap,
+            denoising_method=denoising_method,
+            fmt=self.fmt,
+        )
+
+        # (3) apply the forward-backward STA/LTA
+        sta_lta_timing = forward_backward_sta_lta(
+            # obspy stream
+            st=denoised_st,
+            # STA-LTA
+            sta=sta,
+            lta=lta,
+            thr_on=thr_on,
+            thr_off=thr_off,
+            # default params
+            smooth_sec=smooth_sec,
+            min_event_duration=min_event_duration,
+            fmt=self.fmt,
+        )
+
+        if show_plot is True:
+            png_path = Path(self.project_root) / "plots/STA-LTA"
+            stats = denoised_st[0].stats  # type: ignore
+
+            t1 = UTCDateTime(stats.starttime).strftime(self.fmt)
+            t2 = UTCDateTime(stats.starttime).strftime(self.fmt)
+            if event_id is None:
+                png_name = f"{t1}_to_{t2}"
+            else:
+                png_name = f"{event_id:03d}_{t1}_to_{t2}"
+
+            plot_sta_lta(
+                st=denoised_st,
+                sta_lta_timing=sta_lta_timing,
+                # STA-LTA
+                sta=sta,
+                lta=lta,
+                thr_on=thr_on,
+                thr_off=thr_off,
+                # default params
+                f_min=self.f_min,
+                f_max=self.f_max,
+                # show and save
+                show_plot=show_plot,
+                save_plot=save_plot,
+                png_path=png_path,
+                png_name=png_name,
+            )
+
+        return sta_lta_timing
 
 
-def usage():
-    fb = FlowBench()
+def usage(on_glic=False):
+
+    fb = FlowBench(version="v2dot1dot2")
+
+    # download the Non-FDSN data from Glic
+    # there are may have E and N components data
+    if on_glic is True:
+        fb.down_all_seis_data(buffer_day=1, data_source="GLIC")
 
     # download all FSDN data
-    fb.down_all_seis_data(buffer=1, data_source="FDSN")
+    fb.down_all_seis_data(buffer_day=1, data_source="FDSN")
 
-    # load the meta
-    seis_meta = fb.get_metadata(meta_type="seis", print_meta=False)
+    # # load the meta
+    seis_met = fb.get_metadata(meta_type="seis", print_meta=False)
     event_meta = fb.get_metadata(meta_type="event", print_meta=False)
-    
-    # request the evnet id 160
-    st_raw, st_cooked = fb.request_one_seis_event(event_id=160)
-    st_raw.plot() # type: ignore
+
+    # request one evnet
+    event_id = 160
+    st_raw, st_cooked = fb.request_one_seis_event(event_id=90)
+    st_raw.plot()  # type: ignore
     st_cooked.plot()
+    sta_lta_timing = fb.get_event_t(st=st_cooked, show_plot=True, save_plot=True, event_id=event_id)

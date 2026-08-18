@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-14T00:31:16
+# __modification time__ = Last modified: 2026-08-17T09:54:15
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -25,11 +25,11 @@ sys.path.append(str(project_root))
 def xlsx2txt(input_xlsx_path, output_txt_path, column_s, column_e):
 
     try:
-        usecols = list(range(column_s, column_e)) # select part of the columns
-        df = pd.read_excel(input_xlsx_path, engine='openpyxl', header=3, usecols=usecols)
-    except Exception as e:
+        usecols = list(range(column_s, column_e))  # select part of the columns
+        df = pd.read_excel(input_xlsx_path, engine="openpyxl", sheet_name=0, header=3, usecols=usecols)
+    except Exception as e:  # noqa: BLE001
         raise ValueError(f"Exception error.\n{e}")
 
     df.to_csv(output_txt_path, index=False)
-    
+
     return df
