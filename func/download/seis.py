@@ -10,7 +10,7 @@ import os
 import pandas as pd
 
 from obspy.clients.fdsn import Client
-from obspy import read, Inventory, read_inventory, UTCDateTime
+from obspy import read, Inventory, read_inventory, UTCDateTime, Stream
 
 import urllib.parse
 
@@ -234,34 +234,34 @@ def load_raw_nextcloud(
     except Exception as e:  # noqa: BLE001
         raise ValueError("Please make sure you have the Nextcloud key at:\n f'/project_root/config/Nextcloud_key.yml' ")
 
+    st_raw = Stream()
     year = UTCDateTime(starttime).year
-    julday = UTCDateTime(starttime).julday
-    sub_folder = f"{continent}/{seis_cat}/{year}/{seis_station}/{seis_channel}"
-    file_name = f"{seis_network}.{seis_station}.{seis_channel}.{year}.{julday:03d}.mseed"
 
-    st_path = Path(project_root) / local_dir / sub_folder / file_name
-    local_file_path = st_path
+    for julday in range(UTCDateTime(starttime).julday, UTCDateTime(endtime).julday + 1):
+        sub_folder = f"{continent}/{seis_cat}/{year}/{seis_station}/{seis_channel}"
+        file_name = f"{seis_network}.{seis_station}.{seis_channel}.{year}.{julday:03d}.mseed"
+        st_raw_path = Path(project_root) / local_dir / sub_folder / file_name
 
-    try:
-        # try to load from local first
-        st_raw = read(local_file_path)
-    except FileNotFoundError:
-        # if there is no this file, then, go to nextcloud
-        remote_file_path = f"{sub_folder}/{file_name}"
-        remote_file_url = f"{base_url.rstrip('/')}/{urllib.parse.quote(remote_file_path, safe='/')}"
+        try:
+            # try to load from local first
+            st_raw = st_raw + read(st_raw_path)
+        except FileNotFoundError:
+            # if there is no this file, then, go to nextcloud
+            remote_file_path = f"{sub_folder}/{file_name}"
+            remote_file_url = f"{base_url.rstrip('/')}/{urllib.parse.quote(remote_file_path, safe='/')}"
 
-        data_exchange(
-            purpose="download",
-            local_file_path=local_file_path,
-            remote_sub_folder_url=None,
-            remote_file_url=remote_file_url,
-            share_token=share_token,
-            pass_word=pass_word,
-        )
+            data_exchange(
+                purpose="download",
+                local_file_path=st_raw_path,
+                remote_sub_folder_url=None,
+                remote_file_url=remote_file_url,
+                share_token=share_token,
+                pass_word=pass_word,
+            )
 
-        st_raw = read(local_file_path)
-    except Exception as e:  # noqa: BLE001
-        raise ValueError(f"Exception error.\n{e}")
+            st_raw += read(st_raw_path)
+        except Exception as e:  # noqa: BLE001
+            raise ValueError(f"Exception error.\n{e}")
 
     if seis_response == "xml":
         inv_remote_sub_folder = f"{continent}/{seis_cat}/{year}/{seis_station}/inventory.xml"
