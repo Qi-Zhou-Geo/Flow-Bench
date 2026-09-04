@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-18T16:55:53
+# __modification time__ = Last modified: 2026-08-28T16:22:24
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -155,6 +155,8 @@ class FlowBench:
         lta=None,
         thr_on=None,
         thr_off=None,
+        f_min=None,
+        f_max=None,
         # default params
         smooth_sec=None,
         min_event_duration=None,
@@ -192,6 +194,12 @@ class FlowBench:
 
         if min_event_duration is None:
             min_event_duration = self.min_event_duration
+
+        if f_min is None:
+            f_min = self.f_min
+
+        if f_max is None:
+            f_max = self.f_max
         # endregion
 
         # (2) denoise it
@@ -239,8 +247,8 @@ class FlowBench:
                 thr_on=thr_on,
                 thr_off=thr_off,
                 # default params
-                f_min=self.f_min,
-                f_max=self.f_max,
+                f_min=f_min,
+                f_max=f_max,
                 # show and save
                 show_plot=show_plot,
                 save_plot=save_plot,

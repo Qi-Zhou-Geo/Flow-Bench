@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-18T16:18:58
+# __modification time__ = Last modified: 2026-09-03T12:23:49
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -32,7 +32,12 @@ from func.seismic.st2tr import stream_to_trace
 
 
 plt.rcParams.update(
-    {"font.size": 7, "legend.fontsize": 6, "axes.formatter.limits": (-3, 6), "axes.formatter.use_mathtext": True}
+    {
+        "font.size": 7,
+        "legend.fontsize": 6,
+        "axes.formatter.limits": (-3, 6),
+        "axes.formatter.use_mathtext": True,
+    }
 )
 
 
@@ -161,9 +166,17 @@ def time_series_plot(obspy_streams, time_markers=None, time_markers_label=None):
             st._cleanup()
             st = st[0]
 
+        stats = st.stats  # type: ignore
         data = st.data  # type: ignore
-        sps = st.stats.sampling_rate  # type: ignore
-        duration = st.stats.endtime - st.stats.starttime  # type: ignore # unit by second
+
+        network = stats.network
+        station = stats.station
+        location = stats.location
+        channel = stats.channel
+        sps = stats.sampling_rate
+
+        duration = stats.endtime - stats.starttime
+        meta_data = f"{network}-{station}-{location}-{channel}-{sps}"
 
         if duration >= 12 * 3600:
             x_interval = 4 * 3600
@@ -179,7 +192,7 @@ def time_series_plot(obspy_streams, time_markers=None, time_markers_label=None):
         ax = plt.subplot(gs[idx])
         axes.append(ax)
 
-        ax.plot(data, color="black")
+        ax.plot(data, color="black", label=meta_data)
         ax.set_xlim(0, data.size)
 
         if time_markers is not None and time_markers_label is not None:

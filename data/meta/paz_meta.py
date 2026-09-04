@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-18T13:11:10
+# __modification time__ = Last modified: 2026-08-30T13:07:34
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -111,8 +111,8 @@ def load_paz(sensor_type):
         # original unit is already m/s.
         "unknown-ChalkCliffs": 1.0,
         #
-        # digital counts >> m/s
-        "unknown-Goulinping": 2 * 10**9,
+        # digital counts >> m/s, normal frequency response: 0.1 - 120 Hz, confimed with Dr. Yunpeng Yang at 2026-08-30
+        "paz-PMS10-Goulinping": 1.192 * 10**9,  # paper >> https://doi.org/10.1029/2023JF007527
         #
         # digital counts >> m/s
         "unknown-Ruapehu": 5 * 10**9,
