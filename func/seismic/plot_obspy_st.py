@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-09-03T12:23:49
+# __modification time__ = Last modified: 2026-09-05T11:55:19
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -85,8 +85,11 @@ def psd_plot(fig, ax, cbar_ax, st, fix_colorbar=True, per_lap=0.5, wlen=60, x_in
     ax.set_yticks([1, 10, 20, 30, 40, 45], [1, 10, 20, 30, 40, 45])
     ax.set_ylabel("Frequency [Hz]", weight="bold")
 
-    cbar = fig.colorbar(ax.images[0], cax=cbar_ax, orientation="horizontal")
-    cbar.set_label("Power Spectral Density (dB)")
+    if cbar_ax is None:
+        pass
+    else:
+        cbar = fig.colorbar(ax.images[0], cax=cbar_ax, orientation="horizontal")
+        cbar.set_label("Power Spectral Density (dB)")
 
     rewrite_x_ticks(
         ax,

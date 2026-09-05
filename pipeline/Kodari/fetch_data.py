@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-27T14:59:36
+# __modification time__ = Last modified: 2026-09-04T15:08:28
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -41,8 +41,8 @@ seis_response = "xml"
 sensor_type = "Guralp CMG 3T"
 
 # event meta
-starttime = UTCDateTime("2026-08-25T22:00:00")  # UTC+0
-endtime = UTCDateTime("2026-08-26T08:00:00")
+starttime = UTCDateTime("2026-08-26T02:00:00")  # UTC+0
+endtime = UTCDateTime("2026-08-26T08:00:00")  # UTC+0 >= "2026-08-26T06:00:00"
 
 st_raw, inv_or_paz = load_raw_fdsn(
     # catchment meta
@@ -69,6 +69,11 @@ st_raw, inv_or_paz = load_raw_fdsn(
 st_cooked = cooking_recipe(st=st_raw, inv_or_paz=inv_or_paz, f_min=1, f_max=25)
 
 # remembe to change this path for your project
+st_path = Path("/Users/qizhou/#python/Flow-Alert/demo/Kodari/st_raw.mseed")
+assert st_raw is not None
+st_raw.write(st_path, format="MSEED")
+
+
 st_path = Path("/Users/qizhou/#python/Flow-Alert/demo/Kodari/st_cooked.mseed")
 st_cooked.write(st_path, format="MSEED")
 st_cooked.plot()

@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-16T18:21:30
+# __modification time__ = Last modified: 2026-09-04T15:10:56
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
-# __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Nedasd
+# __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
 
 from obspy import Trace, Stream, UTCDateTime

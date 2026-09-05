@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-09-04T10:25:58
+# __modification time__ = Last modified: 2026-09-05T11:42:55
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -9,7 +9,7 @@
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 
-from obspy import UTCDateTime
+from obspy import UTCDateTime, Stream
 
 # region ### add the sys.path to search for custom modules ###
 import sys
@@ -70,6 +70,8 @@ def check_nearby_station(
     )
 
     print(inv)
+
+    st_cooked_all = Stream()
     for network in inv:  # type: ignore
         for station in network:
             for channel in station:
@@ -109,6 +111,7 @@ def check_nearby_station(
                     )
 
                     st_cooked = cooking_recipe(st=st_raw, inv_or_paz=inv_or_paz, f_min=f_min, f_max=f_max)
+                    st_cooked_all = st_cooked_all + st_cooked
 
                     # plot the waveform
                     fig, axes = time_series_plot(obspy_streams=st_cooked, time_markers=None, time_markers_label=None)
@@ -150,3 +153,5 @@ def check_nearby_station(
 
                 except Exception as e:  # noqa: BLE001
                     print(fmt, e)
+
+    return st_cooked_all

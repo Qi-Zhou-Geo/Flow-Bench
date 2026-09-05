@@ -1,4 +1,4 @@
-# Last modified: 2026-08-28T10:18:26
+# Last modified: 2026-09-04T15:34:35
 # Author: Qi Zhou
 
 ## how to use this?
@@ -17,12 +17,14 @@ run_temp_test.sh
 .idea/
 .DS_Store
 .vscode
+archive
 
 ######### geo branch ######### 
 config/OpenTopography_key.yml
 config/Zenodo_token.yml
 config/Nextcloud_key.yml
 
+data/cache
 data/seis_raw
 data/seis_cooked
 
@@ -32,6 +34,8 @@ data/geo_cooked
 data/event_catalog/*.xlsx
 data/event_catalog/*.txt
 
+data/cartopy_backgrounds/*
+!data/cartopy_backgrounds/usage.md
 ######### doc ######### 
 docs
 
