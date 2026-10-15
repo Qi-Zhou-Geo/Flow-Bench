@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-09-05T14:07:21
+# __modification time__ = Last modified: 2026-09-09T15:57:57
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -145,6 +145,86 @@ for idx, st_cooked in enumerate(st_cooked_all):
     ax.set_yticks([1, 15, 25], [1, 15, 25])
 
 png_name = f"pipeline/find_best_data/{seis_cat}_{starttime.julday:03d}/psd.png"
+png_path = Path(project_root) / png_name
+png_path.parent.mkdir(parents=True, exist_ok=True)
+plt.tight_layout()
+plt.savefig(png_path, dpi=600)
+plt.close(fig)
+
+
+## 3 psds
+event_id = 102
+seis_cat = "Helens"
+starttime = UTCDateTime("2023-05-15T03:35:29")
+
+cache_dir = Path(project_root) / f"data/cache/{event_id:03d}_{seis_cat}_cooked_all.mseed"
+st_cooked_all = read(cache_dir)
+
+num_st = len(st_cooked_all)
+half_st = int(num_st / 3)
+rest_st = num_st - half_st
+
+# plot the psd
+fig = plt.figure(figsize=(6, 9))
+gs = gridspec.GridSpec(half_st + 1, 1, height_ratios=[1] + [10] * half_st)
+
+for idx, st_cooked in enumerate(st_cooked_all[:half_st]):
+    if idx == 0:
+        cbar_ax = plt.subplot(gs[idx])
+    else:
+        cbar_ax = None
+
+    ax = plt.subplot(gs[idx + 1])
+    ax, data_sps = psd_plot(
+        fig,
+        ax,
+        cbar_ax,
+        st=st_cooked,
+        fix_colorbar=True,
+        per_lap=0.5,
+        wlen=60,
+        x_interval=2,
+    )
+
+    ax.set_title(label=f"{st_cooked.stats.network}-{st_cooked.stats.station}-{st_cooked.stats.channel}", loc="left")
+    ax.set_ylim(1, 25)
+    ax.set_yticks([1, 15, 25], [1, 15, 25])
+
+png_name = f"pipeline/find_best_data/{seis_cat}_{starttime.julday:03d}/psd1.png"
+png_path = Path(project_root) / png_name
+png_path.parent.mkdir(parents=True, exist_ok=True)
+plt.tight_layout()
+plt.savefig(png_path, dpi=600)
+plt.close(fig)
+
+
+# plot the psd
+fig = plt.figure(figsize=(6, 9))
+gs = gridspec.GridSpec(rest_st + 1, 1, height_ratios=[1] + [10] * rest_st)
+
+for idx, st_cooked in enumerate(st_cooked_all[half_st:]):
+    if idx == 0:
+        cbar_ax = plt.subplot(gs[idx])
+    else:
+        cbar_ax = None
+
+    ax = plt.subplot(gs[idx + 1])
+    ax, data_sps = psd_plot(
+        fig,
+        ax,
+        cbar_ax,
+        st=st_cooked,
+        fix_colorbar=True,
+        per_lap=0.5,
+        wlen=60,
+        x_interval=2,
+    )
+
+    ax.set_title(label=f"{st_cooked.stats.network}-{st_cooked.stats.station}-{st_cooked.stats.channel}", loc="left")
+    ax.set_ylim(1, 25)
+    ax.set_yticks([1, 15, 25], [1, 15, 25])
+
+png_name = f"pipeline/find_best_data/{seis_cat}_{starttime.julday:03d}/psd2.png"
 png_path = Path(project_root) / png_name
 png_path.parent.mkdir(parents=True, exist_ok=True)
 plt.tight_layout()

@@ -1,4 +1,4 @@
-# Last modified: 2026-09-04T15:34:35
+# Last modified: 2026-09-25T12:56:57
 # Author: Qi Zhou
 
 ## how to use this?
@@ -18,18 +18,18 @@ run_temp_test.sh
 .DS_Store
 .vscode
 archive
+cache
 
 ######### geo branch ######### 
-config/OpenTopography_key.yml
+config/dem_key.yml
 config/Zenodo_token.yml
 config/Nextcloud_key.yml
 
 data/cache
 data/seis_raw
 data/seis_cooked
-
-data/geo_raw
-data/geo_cooked
+data/hydro_raw
+data/hydro_cooked
 
 data/event_catalog/*.xlsx
 data/event_catalog/*.txt
@@ -43,4 +43,4 @@ plots
 
 
 ######### temp ######### 
-pipeline/Veslemannen
+pipeline/temp

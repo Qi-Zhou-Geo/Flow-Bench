@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-28T16:22:24
+# __modification time__ = Last modified: 2026-10-12T17:41:47
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -31,7 +31,7 @@ from func.download.seis_wrapper import all_seis_data, one_seis_event
 # for STA/LTA
 from func.seismic.denoising import denoise_st
 from func.sta_lta.forward_backward import forward_backward_sta_lta
-from func.sta_lta.post_process import plot_sta_lta
+from func.sta_lta.post_process import plot_sta_lta, plot_sta_lta_psd
 
 
 class FlowBench:
@@ -255,6 +255,16 @@ class FlowBench:
                 png_path=png_path,
                 png_name=png_name,
             )
+
+            if save_plot is True:
+                png_name = f"{event_id:03d}_{t1}_to_{t2}_psd.png"
+                plot_sta_lta_psd(
+                    st=st.copy(),
+                    sta_lta_timing=sta_lta_timing,
+                    x_interval=2,
+                    png_path=png_path,
+                    png_name=png_name,
+                )
 
         return sta_lta_timing
 

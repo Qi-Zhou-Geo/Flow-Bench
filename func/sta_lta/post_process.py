@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-17T21:43:02
+# __modification time__ = Last modified: 2026-10-12T17:48:07
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -26,6 +26,7 @@ sys.path.append(str(project_root))
 
 # import the custom functions
 from func.seismic.plot_obspy_st import time_series_plot
+from func.seismic.plot_obspy_st import psd_plot
 
 
 def plot_sta_lta(
@@ -128,4 +129,66 @@ def plot_sta_lta(
     if show_plot is True:
         plt.show()
 
+    plt.close(fig)
+
+
+def plot_sta_lta_psd(
+    st,
+    sta_lta_timing,
+    x_interval,
+    png_path,
+    png_name,
+):
+    stats = st[0].stats
+    starttime = stats.starttime
+
+    fig = plt.figure(figsize=(6, 4))
+    gs = fig.add_gridspec(2, 1, height_ratios=[1, 10])
+
+    cbar_ax = fig.add_subplot(gs[0])
+    ax = fig.add_subplot(gs[1])
+
+    ax, data_sps = psd_plot(
+        fig,
+        ax,
+        cbar_ax,
+        st=st.copy(),
+        fix_colorbar=True,
+        per_lap=0.5,
+        wlen=60,
+        x_interval=x_interval,
+    )
+
+    ax.set_title(label=f"{stats.network}-{stats.station}-{stats.channel}", loc="left")
+    ax.set_yticks([1, 25, 50], [1, 25, 50])
+
+    # Add event markers, preserving the PSD time range.
+    xlim = ax.get_xlim()
+    event_timing = sta_lta_timing["event_timing"]
+
+    for i, (key, value) in enumerate(event_timing.items()):
+        if "start" in key:
+            ls = "-"
+            marker_label = f"start: {value}"
+        elif "end" in key:
+            ls = "--"
+            marker_label = f"end: {value}"
+        else:
+            continue
+
+        # Assumes PSD x coordinates are seconds from starttime.
+        x = UTCDateTime(value) - starttime
+        ax.axvline(x=x, color=f"C{i}", lw=1, ls=ls, zorder=10, label=marker_label)
+
+    ax.set_xlim(xlim)
+
+    handles, labels = ax.get_legend_handles_labels()
+    if handles:
+        ax.legend(handles, labels, fontsize=6, loc="best")
+
+    output_path = Path(png_path) / png_name
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=600)
     plt.close(fig)

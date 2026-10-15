@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-09-05T13:19:44
+# __modification time__ = Last modified: 2026-09-15T14:16:06
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -76,8 +76,11 @@ def main(
 
 
 # in terminal
+# python volcanic_debris_flow.py --version v2dot1dot5 --seis_cat Baker --event_id 97
+# python volcanic_debris_flow.py --version v2dot1dot5 --seis_cat Helens --event_id 102
 # python volcanic_debris_flow.py --version v2dot1dot5 --seis_cat Hood --event_id 103
-# python volcanic_debris_flow.py --version v2dot1dot5 --seis_cat Shasta--event_id 122
+# python volcanic_debris_flow.py --version v2dot1dot5 --seis_cat Rainier --event_id 112
+# python volcanic_debris_flow.py --version v2dot1dot5 --seis_cat Shasta --event_id 122
 if __name__ == "__main__":
     # receive the event id
     parser = argparse.ArgumentParser()
@@ -92,6 +95,7 @@ if __name__ == "__main__":
     seis_cat = args.seis_cat
     volcanic_meta = {
         # "seis_cat": (seis_client, lat, lon),
+        "Baker": ("IRIS", 48.776091, -121.812427),
         "Helens": ("IRIS", 46.199347, -122.189968),
         "Hood": ("IRIS", 45.373198, -121.695682),
         "Rainier": ("IRIS", 46.852036, -121.758848),

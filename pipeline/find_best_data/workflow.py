@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-09-05T11:42:55
+# __modification time__ = Last modified: 2026-09-22T17:09:37
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -116,7 +116,7 @@ def check_nearby_station(
                     # plot the waveform
                     fig, axes = time_series_plot(obspy_streams=st_cooked, time_markers=None, time_markers_label=None)
 
-                    png_name = f"pipeline/find_best_data/{seis_cat}_{starttime.julday:03d}/{file_name}_waveform.png"
+                    png_name = f"plots/find_best_data/{seis_cat}_{starttime.julday:03d}/{file_name}_waveform.png"
                     png_path = Path(project_root) / png_name
                     png_path.parent.mkdir(parents=True, exist_ok=True)
 

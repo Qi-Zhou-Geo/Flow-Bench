@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-09-14T11:00:33
+# __modification time__ = Last modified: 2026-10-15T10:38:38
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -39,20 +39,22 @@ event_meta = fb.get_metadata(meta_type="event", print_meta=False)
 # print(seis_meta)
 
 # request one evnet
-event_id = 14
+event_id = 78
 st_raw, st_cooked = fb.request_one_seis_event(event_id=event_id)
 st_raw.plot()  # type: ignore
 st_cooked.plot()  # x is UTC+0 time, y is amplitude (unit by m/s)
 
 
 # (2) print the metadata information
-print(st_cooked[0].stats)
+print(st_cooked[0].stats)  # type: ignore
 
 
 # (3) Find the time when the amp is maximum,
 # we can assume this time stamps conspros the shortest "event to statrion"
-seis_data = np.array(st_cooked[0].data)
-amp_max_t = UTCDateTime(st_cooked[0].stats.starttime) + np.argmax(np.abs(seis_data)) / st_cooked[0].stats.sampling_rate
+seis_data = np.array(st_cooked[0].data)  # type: ignore
+print(np.max(np.abs(st_cooked[0].data)))  # type: ignore
+
+amp_max_t = UTCDateTime(st_cooked[0].stats.starttime) + np.argmax(np.abs(seis_data)) / st_cooked[0].stats.sampling_rate  # type: ignore
 print(amp_max_t)
 
 

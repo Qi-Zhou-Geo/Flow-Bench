@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-30T13:07:34
+# __modification time__ = Last modified: 2026-10-14T15:06:20
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -38,6 +38,28 @@
 #     'sensitivity': sensitivity_sensor * sensitivity_logger # ctotal sensitivity [counts / (m/s)]
 # }
 
+
+## for SmartSolo Sensor
+# "paz-IGU-16HR-EB-3C-5Hz": {
+
+# "zeros": [0j, 0j], # alway same
+# "poles": [
+#     -22.211059 + 22.217768j,
+#     -22.211059 - 22.217768j
+# ], # alway same
+
+# # Normalization constant (A0) for the geophone transfer function stage
+# "gain": 1.0,
+
+# # Total System Sensitivity = [Sensor Sensitivity] * [Digitizer Sensitivity]
+
+# # 1. Sensor Sensitivity (5Hz Geophone):  76.7 V / (m/s)  [Standard open-circuit]
+# # 2. Digitizer Sensitivity (32-bit ADC): 3355442.8 counts/V * 10**(Gain_dB / 20)
+# # https://nappe.wustl.edu/smartsolo/files/SmartSolo_Hardware_User_Manual_EN_V2.0.pdf
+
+# "sensitivity": [Sensor Sensitivity] * [Digitizer Sensitivity]
+# }
+
 # endregion
 
 
@@ -66,7 +88,7 @@ def load_paz(sensor_type):
             "zeros": [(0 + 0j), (0 + 0j)],
             "poles": [(-19.78 + 20.20j), (-19.78 - 20.20j)],
             "gain": 1,
-            "sensitivity": 27.7 * 1.3115 * 1e8,  # counts / (m/s)
+            "sensitivity": 27.7 * 1.3115 * 1e8 * 10,  # counts / (m/s)
         },
         "paz-3D-NoiseScope": {
             # works for paz_3D_NoiseScope
@@ -97,7 +119,7 @@ def load_paz(sensor_type):
             "zeros": [(0 + 0j), (0 + 0j)],
             "poles": [(-22.211059 + 22.217768j), (-22.211059 - 22.217768j)],
             "gain": 1,
-            "sensitivity": 76.8 * 8000,  # counts / (m/s)
+            "sensitivity": 76.8 * 8000 * 10,  # counts / (m/s)
         },
         #
         # The following catchments/sensors use scalar amplitude calibration.
@@ -115,13 +137,38 @@ def load_paz(sensor_type):
         "paz-PMS10-Goulinping": 1.192 * 10**9,  # paper >> https://doi.org/10.1029/2023JF007527
         #
         # digital counts >> m/s
-        "unknown-Ruapehu": 5 * 10**9,
+        "unknown-Ruapehu": 5 * 10**10,
         #
         # digital counts >> m/s
         "unknown-Hongqi": 838860800.0,  # (2.5 / 2**23) / 250.0,
         #
         # digital counts >> m/s
-        "unknown-Yanmen": 838860800.0,  # (2.5 / 2**23) / 250.0,
+        "unknown-Yanmen": {
+            "zeros": [(0 + 0j), (0 + 0j)],
+            "poles": [(-23.0467 + 21.3497j), (-23.0467 - 21.3497j)],
+            "gain": 1000.0,
+            "sensitivity": 76.7,
+        },
+        ##
+        "SmartSolo-IGU-16HR-3C-12-channel-gain": {
+            # please
+            # (1) make sure your sensor is IGU-16HR-EB-3C-5Hz, https://smartsolo.com/igu-16hr-3c.html
+            # (2) make sure the unit of your raw data is counts
+            "zeros": [0j, 0j],  # alway same for SmartSolo Sensor IGU-16HR-EB-3C-5Hz
+            "poles": [  # alway same for SmartSolo Sensor IGU-16HR-EB-3C-5Hz
+                -21.99114858 + 22.43545909j,
+                -21.99114858 - 22.43545909j,
+            ],
+            "gain": 1.0,  # alway same for SmartSolo Sensor IGU-16HR-EB-3C-5Hz
+            # Note from QZ
+            # Last modified: 2026-10-14T11:50:23
+            # official link
+            # https://nappe.wustl.edu/smartsolo/files/SmartSolo_Hardware_User_Manual_EN_V2.0.pdf
+            # sensitivity: [Sensor Sensitivity] * [Digitizer Sensitivity]
+            # Sensor Sensitivity = 76.7 V / (m/s). Note: 76.7 V / (m/s) for 5Hz, 78.7V/m/s for 10 Hz
+            # Digitizer Sensitivity = 3355.4428 counts/mV * 10**(channel_Gain_dB / 20)
+            "sensitivity": 76.7 * 3355.4428 * 10**3 * 10 ** (12 / 20),
+        },
     }
 
     inv_or_paz = paz_dict.get(sensor_type, None)  # retuen None incase there is no metadata
