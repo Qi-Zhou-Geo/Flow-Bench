@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-09-25T13:41:36
+# __modification time__ = Last modified: 2026-10-16T09:58:58
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -44,6 +44,7 @@ def point2gpd(
         save_path = Path(save_path)
         save_path.parent.mkdir(parents=True, exist_ok=True)
         gpd_point.to_file(save_path)
+        print(f"Save file to: {save_path}\n\n")
 
     return gpd_point
 
@@ -87,3 +88,5 @@ def project_dem(dem_path, projected_dem_path, resolution, crs=None):
             )
 
     print(f"Done projection.\nProjected DEM was saved at >> {projected_dem_path}\nCRS >> {crs}\n\n")
+
+    return projected_dem_path

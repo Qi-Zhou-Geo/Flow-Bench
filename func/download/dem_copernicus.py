@@ -1,25 +1,20 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-09-24T17:16:11
+# __modification time__ = Last modified: 2026-10-16T16:50:04
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
+import sys
 
 import yaml
-import zipfile
-import shutil
 import requests
+
 
 import numpy as np
 
-from shapely.geometry import box, shape
-
-
-from urllib.parse import urlparse
 
 # region ### add the sys.path to search for custom modules ###
-import sys
 from pathlib import Path
 
 current_file = Path(__file__).resolve()
@@ -34,7 +29,7 @@ sys.path.append(str(project_root))
 from func.toolkit.xlsx_to_txt import xlsx2txt
 
 
-# public for Copernicus and ASF
+# public for Copernicus
 def load_key(key_name):
 
     try:
@@ -76,13 +71,21 @@ def load_dem_range(version, seis_cat, dem_resolution):
 
 
 # private for Copernicus
-def define_copernicus_params(version, seis_cat, dem_resolution):
+def define_copernicus_params(
+    version,
+    seis_cat,
+    dem_resolution,
+    dem_range=None,  # or tuple (7.580589376, 7.654025645, 46.25313513, 46.31627989)
+):
 
     API_KEY = load_key("Copernicus")
-    temp = load_dem_range(version, seis_cat, dem_resolution)
-    dem_west_lon, dem_south_lat, dem_east_lon, dem_north_lat = temp
-
     url = "https://portal.opentopography.org/API/globaldem"
+
+    if dem_range is None:
+        temp = load_dem_range(version, seis_cat, dem_resolution)
+        dem_west_lon, dem_south_lat, dem_east_lon, dem_north_lat = temp
+    else:
+        dem_west_lon, dem_south_lat, dem_east_lon, dem_north_lat = dem_range
 
     west = min(dem_west_lon, dem_east_lon)  # minimum longitude
     east = max(dem_west_lon, dem_east_lon)  # maximum longitude
@@ -102,146 +105,30 @@ def define_copernicus_params(version, seis_cat, dem_resolution):
     return url, params
 
 
-def download_dem_from_copernicus(version, seis_cat, dem_resolution):
+def download_dem_from_copernicus(version, seis_cat, dem_provider, dem_resolution, dem_range):
 
     # (1) prepaer the params
-    url, params = define_copernicus_params(version, seis_cat, dem_resolution)
+    url, params = define_copernicus_params(version, seis_cat, dem_resolution, dem_range)
 
     # (2) buidl the request
-    dem = requests.get(url, params=params)
-    dem.raise_for_status()
+    try:
+        dem = requests.get(url, params=params)
+        dem.raise_for_status()
+    except requests.HTTPError as e:
+        message = e.response.text.replace(str(params["API_Key"]), "[hidden]")  # type: ignore
+        raise RuntimeError(f"OpenTopography HTTP {e.response.status_code}:\n{message}")  # type: ignore
 
     # (3) save to local
-    dem_path = Path(project_root) / f"data/hydro_raw/{seis_cat}/{seis_cat}_{dem_resolution}.tif"
+    dem_path = Path(project_root) / f"data/hydro_raw/{seis_cat}/{seis_cat}_{dem_provider}_{dem_resolution}m.tif"
     dem_path.parent.mkdir(parents=True, exist_ok=True)
     with open(dem_path, "wb") as f:
         f.write(dem.content)
 
-    return dem
-
-
-# private for ASF
-def define_asf_params(version, seis_cat, dem_resolution):
-
-    API_KEY = load_key("ASF")
-
-    west, south, east, north = load_dem_range(version, seis_cat, dem_resolution)
-    bounds = (
-        min(west, east),
-        min(south, north),
-        max(west, east),
-        max(south, north),
-    )
-
-    url = "https://api.daac.asf.alaska.edu/services/search/param"
-
-    params = {
-        "platform": "ALOS",
-        "processingLevel": "RTC_HI_RES",
-        "intersectsWith": box(*bounds).wkt,
-        "output": "geojson",
-        "maxResults": 250,
-    }
-
-    headers = {"Authorization": f"Bearer {API_KEY}"}
-
-    return url, params, headers, bounds
-
-
-def select_asf_products(catalog, bounds, max_scenes=8):
-    remaining = box(*bounds)
-    original_area = remaining.area
-    candidates = []
-    for item in catalog.get("features", []):
-        props = item.get("properties", {})
-        if props.get("url") and item.get("geometry"):
-            candidates.append((props, shape(item["geometry"])))
-    selected = []
-    while candidates and len(selected) < max_scenes:
-        index = max(range(len(candidates)), key=lambda i: remaining.intersection(candidates[i][1]).area)
-        props, footprint = candidates.pop(index)
-        if remaining.intersection(footprint).area == 0:
-            break
-        selected.append(props)
-        remaining = remaining.difference(footprint)
-        if remaining.area / original_area < 1e-6:
-            return selected
-    raise ValueError("ASF scenes do not cover the DEM bounds; increase max_scenes or use Copernicus")
-
-
-def download_file(url, target, session=None, params=None):
-    target = Path(target)
-    target.parent.mkdir(parents=True, exist_ok=True)
-    partial = target.with_suffix(target.suffix + ".part")
-    try:
-        with (session or requests).get(url, params=params, stream=True, timeout=(30, 600)) as response:
-            if not response.ok:
-                # Do not include a request URL containing the API key in errors.
-                raise RuntimeError(f"Download failed: HTTP {response.status_code} from {urlparse(url).hostname}")
-            size = 0
-            with partial.open("wb") as handle:
-                for chunk in response.iter_content(1024 * 1024):
-                    handle.write(chunk)
-                    size += len(chunk)
-            expected = response.headers.get("Content-Length")
-            if expected and not response.headers.get("Content-Encoding") and size != int(expected):
-                raise RuntimeError("Incomplete download")
-        partial.replace(target)
-    except requests.RequestException as error:
-        partial.unlink(missing_ok=True)
-        raise RuntimeError(f"Download connection failed at {urlparse(url).hostname}: {type(error).__name__}") from None
-    except Exception:
-        partial.unlink(missing_ok=True)
-        raise
-    return target
-
-
-def download_dem_from_asf(version, seis_cat, dem_resolution):
-
-    # (1) prepare the parameters
-    url, params, headers, bounds = define_asf_params(version, seis_cat, dem_resolution)
-
-    # (2) search and select scenes covering the DEM region
-    response = requests.get(url, params=params, timeout=120)
-    response.raise_for_status()
-    products = select_asf_products(response.json(), bounds)
-
-    # (3) download and save to local
-    directory = Path(project_root) / f"data/hydro_raw/{seis_cat}"
-    directory.mkdir(parents=True, exist_ok=True)
-
-    dem_paths = []
-
-    with requests.Session() as session:
-        session.headers.update(headers)
-
-        for product in products:
-            archive = directory / Path(urlparse(product["url"]).path).name
-
-            if not archive.exists():
-                download_file(product["url"], archive, session=session)
-
-            # (4) extract the elevation files
-            with zipfile.ZipFile(archive) as bundle:
-                for name in bundle.namelist():
-                    if not name.lower().endswith(".dem.tif"):
-                        continue
-
-                    dem_path = directory / archive.stem / Path(name).name
-                    dem_path.parent.mkdir(parents=True, exist_ok=True)
-
-                    with bundle.open(name) as source, dem_path.open("wb") as target:
-                        shutil.copyfileobj(source, target)
-
-                    dem_paths.append(dem_path)
-
-    if not dem_paths:
-        raise ValueError("No DEM files found in the downloaded archives.")
-
-    return dem_paths
+    return dem_path
 
 
 def usage():
     version = "essd"
+    dem_provider = "Copernicus"
     seis_cat, dem_resolution = "Illgraben", 30
-    download_dem_from_copernicus(version, seis_cat, dem_resolution)
+    download_dem_from_copernicus(version, seis_cat, dem_provider, dem_resolution, dem_range=None)

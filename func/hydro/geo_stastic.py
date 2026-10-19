@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-09-25T13:55:00
+# __modification time__ = Last modified: 2026-10-17T13:18:59
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -162,7 +162,8 @@ def calculate_station_stats(projected_dem_path, channel, stations, n=1, crs="EPS
 def calculate_catchment(
     projected_dem_path,
     catchment_path,
-    channel_path,
+    main_df_channel_path,
+    main_df_channel_extend_path,
     stations=(),
     n=1,
 ):
@@ -175,35 +176,44 @@ def calculate_catchment(
         raise ValueError("The DEM CRS must use metres.")
 
     catchment = gpd.read_file(catchment_path)
-    channel = gpd.read_file(channel_path)
+    channel = gpd.read_file(main_df_channel_path)
+    channel_extend = gpd.read_file(main_df_channel_extend_path)
 
     # These files were generated from the projected DEM
     if catchment.crs is None:
         catchment = catchment.set_crs(dem_crs)
+
     if channel.crs is None:
         channel = channel.set_crs(dem_crs)
 
+    if channel_extend.crs is None:
+        channel_extend = channel_extend.set_crs(dem_crs)
+
     catchment = catchment.to_crs(dem_crs)
     channel = channel.to_crs(dem_crs)
+    channel_extend = channel_extend.to_crs(dem_crs)
 
     if len(channel) != 1 or channel.geometry.iloc[0].geom_type != "LineString":  # type: ignore
-        raise ValueError("Provide one continuous main channel, ordered head → outlet.")
+        raise ValueError("Provide one continuous main channel, ordered head >> outlet.")
 
     basin = catchment.geometry.union_all()
     main_channel = channel.geometry.iloc[0]
+    station_channel = channel_extend.geometry.iloc[0]
 
     # (2) calculate the three parts
     geometry = calculate_geometry(basin, main_channel)
 
+    # basic relief
     relief = calculate_relief(
         projected_dem_path,
         basin,
         geometry["Lb_km"],
     )
 
+    # station-based basic relief
     station_metrics = calculate_station_stats(
         projected_dem_path,
-        main_channel,
+        station_channel,
         stations,
         n=n,
     )
@@ -215,7 +225,8 @@ def usage():
 
     projected_dem_path = "/Users/qizhou/#python/Flow-Bench-geo/cache/hydro/ILLgraben/Illgraben_30_UTM.tif"
     catchment_path = "/Users/qizhou/#python/Flow-Bench-geo/cache/hydro/ILLgraben/catchment.shp"
-    channel_path = "/Users/qizhou/#python/Flow-Bench-geo/cache/hydro/Illgraben/main_channel.shp"
+    main_df_channel_path = "/Users/qizhou/#python/Flow-Bench-geo/cache/hydro/Illgraben/main_channel.shp"
+    main_df_channel_extend_path = "you/define/it"
 
     stations = [
         ("9J.IGB02", 46.286374, 7.627810),
@@ -224,8 +235,9 @@ def usage():
     geometry, relief, station_metrics = calculate_catchment(
         projected_dem_path,
         catchment_path,
-        channel_path,
-        stations=stations,
+        main_df_channel_path,
+        main_df_channel_extend_path,
+        stations=(),
         n=1,
     )
 

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-10-12T17:41:47
+# __modification time__ = Last modified: 2026-10-17T13:17:45
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -67,14 +67,17 @@ class FlowBench:
         meta_xlsx = Path(self.project_root) / f"data/event_catalog/Flow_Bench_Catalog_{self.version}.xlsx"
         meta_txt = Path(self.project_root) / f"data/event_catalog/Flow_Bench_Catalog_{self.version}.txt"
 
+        # note you may check the column ID
         if meta_type == "all":
             column_s, column_e = 17, 19
-        elif meta_type == "seis" or meta_type == "dem":
+        elif meta_type == "seis":
             column_s, column_e = 0, 12
+        elif meta_type == "dem":
+            column_s, column_e = 22, 30 + 1
         elif meta_type == "event":
             column_s, column_e = 17, 19
         else:
-            raise ValueError(f"Unsupported meta_type: {meta_type}")
+            raise ValueError(f"Unsupported meta_type: {meta_type}.\nYou may check the column ID at:\n{meta_xlsx}\n\n")
 
         df_meta = xlsx2txt(input_xlsx_path=meta_xlsx, output_txt_path=meta_txt, column_s=column_s, column_e=column_e)
 
