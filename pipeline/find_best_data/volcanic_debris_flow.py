@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-09-15T14:16:06
+# __modification time__ = Last modified: 2026-11-06T14:17:54
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -21,7 +21,7 @@ sys.path.append(str(project_root))
 # endregion
 
 from func.toolkit.xlsx_to_txt import xlsx2txt
-from pipeline.find_best_data.workflow import check_nearby_station
+from func.seismic.search_sta import check_nearby_station
 
 
 def main(

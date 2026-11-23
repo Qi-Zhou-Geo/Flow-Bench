@@ -1,4 +1,4 @@
-# Last modified: 2026-09-25T12:56:57
+# Last modified: 2026-11-23T23:06:48
 # Author: Qi Zhou
 
 ## how to use this?
@@ -22,11 +22,10 @@ cache
 
 ######### geo branch ######### 
 config/dem_key.yml
-config/Zenodo_token.yml
 config/Nextcloud_key.yml
 
-data/cache
 data/seis_raw
+data/seis_raw(v0dot5)
 data/seis_cooked
 data/hydro_raw
 data/hydro_cooked
@@ -36,11 +35,9 @@ data/event_catalog/*.txt
 
 data/cartopy_backgrounds/*
 !data/cartopy_backgrounds/usage.md
-######### doc ######### 
-docs
 
-plots
-
+demo/*.png
 
 ######### temp ######### 
 pipeline/temp
+plots/STA-LTA

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-10-16T16:50:04
+# __modification time__ = Last modified: 2026-11-03T14:15:12
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -125,10 +125,3 @@ def download_dem_from_copernicus(version, seis_cat, dem_provider, dem_resolution
         f.write(dem.content)
 
     return dem_path
-
-
-def usage():
-    version = "essd"
-    dem_provider = "Copernicus"
-    seis_cat, dem_resolution = "Illgraben", 30
-    download_dem_from_copernicus(version, seis_cat, dem_provider, dem_resolution, dem_range=None)

@@ -1,12 +1,15 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-10-17T13:17:45
+# __modification time__ = Last modified: 2026-11-02T22:11:47
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
-
+import shutil
+import pandas as pd
 from obspy import UTCDateTime
+
+import matplotlib.pyplot as plt
 
 # region ### add the sys.path to search for custom modules ###
 import sys
@@ -33,8 +36,19 @@ from func.seismic.denoising import denoise_st
 from func.sta_lta.forward_backward import forward_backward_sta_lta
 from func.sta_lta.post_process import plot_sta_lta, plot_sta_lta_psd
 
+# for hydrogeomorphic
+from config.wbt_params import load_wbt_params
+from func.download.dem_copernicus import download_dem_from_copernicus
 
-class FlowBench:
+from func.hydro.extract_geo import geo_extracter
+from func.hydro.geo_tool import project_dem, point2gpd
+
+from func.hydro.geo_stastic import calculate_catchment
+
+from func.hydro.geo_plot import plot_catchment
+
+
+class FlowBenchSeis:
     def __init__(self, version):
 
         # model version, e.g., "v2dot1dot1"
@@ -69,13 +83,13 @@ class FlowBench:
 
         # note you may check the column ID
         if meta_type == "all":
-            column_s, column_e = 17, 19
+            column_s, column_e = 17, 18 + 1
         elif meta_type == "seis":
-            column_s, column_e = 0, 12
+            column_s, column_e = 0, 11 + 1
         elif meta_type == "dem":
             column_s, column_e = 22, 30 + 1
         elif meta_type == "event":
-            column_s, column_e = 17, 19
+            column_s, column_e = 17, 18 + 1
         else:
             raise ValueError(f"Unsupported meta_type: {meta_type}.\nYou may check the column ID at:\n{meta_xlsx}\n\n")
 
@@ -85,13 +99,6 @@ class FlowBench:
             print(f"Flow-Bnech Metadata\nNum of rows: {len(df_meta.index)}\nName of columns: {df_meta.columns}\n\n")
 
         return df_meta
-
-    def get_dem(self, seis_cat, dem_resolutio):
-
-        # from seis_cat to the meta
-        dem = 1  # download_dem(seis_cat, dem_resolutio)
-
-        return dem
 
     def down_all_seis_data(self, buffer_day=None, data_source="FDSN"):
 
@@ -272,25 +279,232 @@ class FlowBench:
         return sta_lta_timing
 
 
-def usage(on_glic=False):
+class FlowBenchHydro:
+    def __init__(self, version):
 
-    fb = FlowBench(version="v2dot1dot2")
+        # model version
+        self.version = version
 
-    # download the Non-FDSN data from Glic
-    # there are may have E and N components data
-    if on_glic is True:
-        fb.down_all_seis_data(buffer_day=1, data_source="GLIC")
+        # I/O dir
+        self.project_root = project_root  # project root directory
+        print(f"Note! Your working <project_root> is: {project_root}")
 
-    # download all FSDN data
-    fb.down_all_seis_data(buffer_day=1, data_source="FDSN")
+        self.hydro_raw_dir = Path(self.project_root) / "data/hydro_raw"
+        self.hydro_cooked_dir = Path(self.project_root) / "data/hydro_cooked"
 
-    # # load the meta
-    seis_met = fb.get_metadata(meta_type="seis", print_meta=False)
-    event_meta = fb.get_metadata(meta_type="event", print_meta=False)
+        # load the meta once, same catalog and column IDs as the seismic class
+        fb_seis = FlowBenchSeis(version=version)
+        self.seis_meta = fb_seis.get_metadata(meta_type="seis", print_meta=False)
+        self.dem_meta = fb_seis.get_metadata(meta_type="dem", print_meta=False)
 
-    # request one evnet
-    event_id = 160
-    st_raw, st_cooked = fb.request_one_seis_event(event_id=90)
-    st_raw.plot()  # type: ignore
-    st_cooked.plot()
-    sta_lta_timing = fb.get_event_t(st=st_cooked, show_plot=True, save_plot=True, event_id=event_id)
+        # general parameters
+        self.num_d = 1  # for channel slope of debris-flow channel
+        self.channel_extend = 5000  # channel extension length in m
+        self.delete_cache = False  # delete the WhiteboxTools cache after stream extraction
+
+        # WhiteboxTools parameters, per catchment (fallback to the default)
+        (
+            self.wbt_threshold_default,
+            self.wbt_threshold_dict,
+            self.snap_dist_default,
+            self.snap_dist_dict,
+        ) = load_wbt_params()
+
+    def get_raw_dem_path(self, event_id):
+
+        seis_cat = self.seis_meta["seis_cat"].iloc[event_id]
+        dem_provider = self.dem_meta["dem_provider"].iloc[event_id]
+        dem_resolution = int(self.dem_meta["dem_resolution"].iloc[event_id])  # unit is m
+
+        raw_dem_path = self.hydro_raw_dir / f"{seis_cat}/{seis_cat}_{dem_provider}_{dem_resolution}m.tif"
+
+        return raw_dem_path
+
+    def get_output_dir(self, event_id):
+
+        seis_cat = self.seis_meta["seis_cat"].iloc[event_id]
+        output_dir = self.hydro_cooked_dir / f"{seis_cat}/outlet_{event_id:03d}"
+
+        return output_dir
+
+    def get_projected_dem_path(self, event_id):
+
+        seis_cat = self.seis_meta["seis_cat"].iloc[event_id]
+        dem_resolution = int(self.dem_meta["dem_resolution"].iloc[event_id])
+
+        projected_dem_path = self.get_output_dir(event_id) / f"{seis_cat}_{dem_resolution}_UTM.tif"
+
+        return projected_dem_path
+
+    def download_dem(self, event_id):
+
+        raw_dem_path = self.get_raw_dem_path(event_id)
+
+        # use the existing DEM or download it
+        if raw_dem_path.exists():
+            print(f"Use the exist DEM:\n{raw_dem_path}\n")
+        else:
+            raw_dem_path = download_dem_from_copernicus(
+                version=self.version,
+                seis_cat=self.seis_meta["seis_cat"].iloc[event_id],
+                dem_provider=self.dem_meta["dem_provider"].iloc[event_id],
+                dem_resolution=int(self.dem_meta["dem_resolution"].iloc[event_id]),
+                dem_range=(
+                    # do not change the order
+                    float(self.dem_meta["dem_west_lon"].iloc[event_id]),
+                    float(self.dem_meta["dem_south_lat"].iloc[event_id]),
+                    float(self.dem_meta["dem_east_lon"].iloc[event_id]),
+                    float(self.dem_meta["dem_north_lat"].iloc[event_id]),
+                ),
+            )
+
+        return raw_dem_path
+
+    def process_catchment(
+        self,
+        event_id,
+        wbt_threshold=None,
+        snap_dist=None,
+        delete_cache=None,
+    ):
+        """raw DEM >> streams, catchment, outlet, projected DEM"""
+
+        seis_cat = self.seis_meta["seis_cat"].iloc[event_id]
+        dem_resolution = int(self.dem_meta["dem_resolution"].iloc[event_id])
+
+        # (1) check the parameters
+        if wbt_threshold is None:
+            wbt_threshold = self.wbt_threshold_dict.get(seis_cat, self.wbt_threshold_default)
+
+        if snap_dist is None:
+            snap_dist = self.snap_dist_dict.get(seis_cat, self.snap_dist_default)
+
+        if delete_cache is None:
+            delete_cache = self.delete_cache
+
+        raw_dem_path = self.get_raw_dem_path(event_id)
+        if raw_dem_path.exists() is False:
+            raise FileNotFoundError(f"Run download_dem first, missing:\n{raw_dem_path}")
+
+        # (2) clean the output dir
+        output_dir = self.get_output_dir(event_id)
+        if output_dir.exists():
+            shutil.rmtree(output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
+
+        # (3) extract the streams and project the DEM
+        geo_extracter(
+            dem_path=raw_dem_path,
+            outlet_lon=self.dem_meta["dem_outlet_lon"].iloc[event_id],
+            outlet_lat=self.dem_meta["dem_outlet_lat"].iloc[event_id],
+            output_dir=output_dir,
+            threshold=wbt_threshold,
+            snap_dist=snap_dist,
+            delete_cache=delete_cache,
+        )
+
+        projected_dem_path = project_dem(
+            dem_path=raw_dem_path,
+            projected_dem_path=self.get_projected_dem_path(event_id),
+            resolution=dem_resolution,
+        )
+
+        return projected_dem_path
+
+    def plot_overview(self, event_id):
+
+        seis_cat = self.seis_meta["seis_cat"].iloc[event_id]
+        output_dir = self.get_output_dir(event_id)
+
+        projected_dem_path = self.get_projected_dem_path(event_id)
+        if projected_dem_path.exists() is False:
+            raise FileNotFoundError(f"Run process_catchment first, missing:\n{projected_dem_path}")
+
+        seismic_sta_path = Path(output_dir) / "seis_sta.shp"
+        point2gpd(
+            lon=self.seis_meta["seis_lon"].iloc[event_id],  # float, unit by degree
+            lat=self.seis_meta["seis_lat"].iloc[event_id],  # float, unit by degree
+            save_path=seismic_sta_path,
+            crs="EPSG:4326",
+        )
+
+        catchment_path = Path(output_dir) / "catchment.shp"
+        channel_path = Path(output_dir) / "main_df_channel.shp"
+
+        outlet_path = Path(output_dir) / "outlet.shp"
+        snapped_outlet_path = Path(output_dir) / "temp/snapped_outlet.shp"
+        if snapped_outlet_path.exists():
+            pass
+        else:
+            snapped_outlet_path = None
+
+        head_path = None
+        snapped_head_path = None
+
+        png_path = Path(output_dir) / f"{seis_cat}_overview.png"
+
+        fig, ax = plot_catchment(
+            projected_dem_path=projected_dem_path,
+            catchment_path=catchment_path,
+            channel_path=channel_path,
+            ##
+            head_path=head_path,
+            snapped_head_path=snapped_head_path,
+            ##
+            outlet_path=outlet_path,
+            snapped_outlet_path=snapped_outlet_path,
+            ##
+            seismic_sta_path=seismic_sta_path,
+            ##
+            save_path=png_path,
+            ##
+            crs="EPSG:4326",  # WGS 84 longitude/latitude
+            ##
+            plot_elevation_legend=True,
+        )
+        plt.close(fig)
+
+        return png_path
+
+    def calculate_statistic(self, event_id, num_d=None):
+
+        output_dir = self.get_output_dir(event_id)
+        projected_dem_path = self.get_projected_dem_path(event_id)
+
+        if num_d is None:
+            num_d = self.num_d
+
+        if projected_dem_path.exists() is False:
+            raise FileNotFoundError(f"Run process_catchment first, missing:\n{projected_dem_path}")
+
+        seis_sta_name = (
+            f"{self.seis_meta['seis_network'].iloc[event_id]}-"
+            f"{self.seis_meta['seis_station'].iloc[event_id]}-"
+            f"{self.seis_meta['seis_channel'].iloc[event_id]}"
+        )
+        seis_lon = self.seis_meta["seis_lon"].iloc[event_id]
+        seis_lat = self.seis_meta["seis_lat"].iloc[event_id]
+
+        # (1) calculate the hydrogeomorphic features
+        geometry, relief, station_metrics = calculate_catchment(
+            projected_dem_path=projected_dem_path,
+            catchment_path=output_dir / "catchment.shp",
+            main_df_channel_path=output_dir / "main_df_channel.shp",
+            main_df_channel_extend_path=output_dir / f"main_df_channel_extend_{self.channel_extend}m.shp",
+            stations=[(seis_sta_name, seis_lon, seis_lat)],  # List[tuple]
+            n=num_d,
+        )
+
+        # (2) one-row table
+        geo_row = pd.Series(geometry).round(4).to_frame().T
+        relief_row = pd.Series(relief).round(4).to_frame().T
+        sta_row = station_metrics.reset_index(drop=True)
+        df = pd.concat([geo_row, relief_row, sta_row], axis=1)
+
+        df["seis_cat"] = self.seis_meta["seis_cat"].iloc[event_id]
+        df["metadata_row"] = event_id
+        df["identifier"] = seis_sta_name
+        df["dem_outlet_lat"] = self.dem_meta["dem_outlet_lat"].iloc[event_id]
+        df["dem_outlet_lon"] = self.dem_meta["dem_outlet_lon"].iloc[event_id]
+
+        return df

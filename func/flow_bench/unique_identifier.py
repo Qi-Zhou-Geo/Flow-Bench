@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-09-04T18:06:41
+# __modification time__ = Last modified: 2026-11-06T11:26:15
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -23,13 +23,13 @@ sys.path.append(str(project_root))
 
 
 # import the custom functions
-from func.flow_bench.FlowBench import FlowBench
+from func.flow_bench.FlowBench import FlowBenchSeis
 
 
 def build_identifier(version="v2dot1dot5", fmt="%Y-%m-%dT%H:%M:%S"):
 
     # load the meta
-    fb = FlowBench(version=version)
+    fb = FlowBenchSeis(version=version)
     seis_meta = fb.get_metadata(meta_type="seis", print_meta=False)
     event_meta = fb.get_metadata(meta_type="event", print_meta=False)
 

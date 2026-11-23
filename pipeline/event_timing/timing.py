@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-10-12T17:48:19
+# __modification time__ = Last modified: 2026-11-02T16:16:03
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -21,12 +21,12 @@ sys.path.append(str(project_root))
 # endregion
 
 # import the custom functions
-from func.flow_bench.FlowBench import FlowBench
+from func.flow_bench.FlowBench import FlowBenchSeis
 from func.toolkit.xlsx_to_txt import xlsx2txt
 
 
 # for event_id in range(len(seis_meta)):
-def main(event_id, df, f_min, f_max, thr_on, thr_off):
+def main(event_id, df, f_min, f_max, thr_on, thr_off, sta, lta):
 
     try:
         # load the seismic data
@@ -53,6 +53,8 @@ def main(event_id, df, f_min, f_max, thr_on, thr_off):
             thr_off=thr_off,
             f_min=f_min,
             f_max=f_max,
+            sta=sta,
+            lta=lta,
         )
 
         print(sta_lta_timing)
@@ -65,8 +67,8 @@ if __name__ == "__main__":
     parser.add_argument("--event_id", type=int)
     args = parser.parse_args()
 
-    version = "v2dot1dot5"
-    fb = FlowBench(version=version)
+    version = "essd"
+    fb = FlowBenchSeis(version=version)
     # load the meta
     seis_meta = fb.get_metadata(meta_type="seis", print_meta=False)
     event_meta = fb.get_metadata(meta_type="event", print_meta=False)
@@ -76,10 +78,12 @@ if __name__ == "__main__":
     column_s, column_e = 15, 17
     df = xlsx2txt(input_xlsx_path, output_txt_path, column_s, column_e)
 
-    f_min = 1
-    f_max = 10
-    thr_on = 0.3
-    thr_off = 0.3
+    f_min = 1  # Hz
+    f_max = 10  # Hz
+    thr_on = 0.3  # dimensionless
+    thr_off = 0.3  # dimensionless
+    sta = 180  # seconds
+    lta = 1800  # seconds
 
     main(
         event_id=args.event_id,
@@ -88,4 +92,6 @@ if __name__ == "__main__":
         f_max=f_max,
         thr_on=thr_on,
         thr_off=thr_off,
+        sta=sta,
+        lta=lta,
     )

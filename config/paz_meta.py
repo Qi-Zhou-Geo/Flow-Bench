@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-10-14T15:06:20
+# __modification time__ = Last modified: 2026-10-20T14:53:51
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -140,10 +140,7 @@ def load_paz(sensor_type):
         "unknown-Ruapehu": 5 * 10**10,
         #
         # digital counts >> m/s
-        "unknown-Hongqi": 838860800.0,  # (2.5 / 2**23) / 250.0,
-        #
-        # digital counts >> m/s
-        "unknown-Yanmen": {
+        "unknown-Hongqi": {
             "zeros": [(0 + 0j), (0 + 0j)],
             "poles": [(-23.0467 + 21.3497j), (-23.0467 - 21.3497j)],
             "gain": 1000.0,
@@ -169,6 +166,8 @@ def load_paz(sensor_type):
             # Digitizer Sensitivity = 3355.4428 counts/mV * 10**(channel_Gain_dB / 20)
             "sensitivity": 76.7 * 3355.4428 * 10**3 * 10 ** (12 / 20),
         },
+        # digital counts >> m/s
+        "unknown-Cheerying": 1 * 10**8,
     }
 
     inv_or_paz = paz_dict.get(sensor_type, None)  # retuen None incase there is no metadata

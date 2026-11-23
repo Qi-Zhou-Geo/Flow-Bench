@@ -37,7 +37,7 @@ plt.rcParams.update(
 )
 
 
-def plot_Wolin2019_model(ax, color="red", plot_type="line"):
+def load_Wolin2019_model(freq_bin=0.1):
 
     df = pd.read_csv(f"{project_root}/data/noise_model/low‐noise-model-Wolin2019.csv", header=0)
     freq_l, psd_lnm = df.iloc[:, 0], df.iloc[:, 1]
@@ -47,17 +47,24 @@ def plot_Wolin2019_model(ax, color="red", plot_type="line"):
     freq_h, psd_hnm = df.iloc[:, 0], df.iloc[:, 1]
     psd_hnm = savgol_filter(psd_hnm, window_length=100, polyorder=2)
 
-    # resamping the freq as 0.1 Hz
+    # resamping the freq as freq_bin=0.1 Hz
     # the two models have different frequency resolutions due to manual digitization
     f_min = max(freq_l.min(), freq_h.min())
     f_max = min(freq_l.max(), freq_h.max())
-    freq_uniform = np.arange(f_min, f_max, 0.1)
+    freq_uniform = np.arange(f_min, f_max, freq_bin)
 
     interp_l = interp1d(freq_l, psd_lnm, kind="linear", fill_value="extrapolate")  # type: ignore
     interp_h = interp1d(freq_h, psd_hnm, kind="linear", fill_value="extrapolate")  # type: ignore
 
     psd_lnm_resampled = interp_l(freq_uniform)
     psd_hnm_resampled = interp_h(freq_uniform)
+
+    return freq_uniform, psd_lnm_resampled, psd_hnm_resampled
+
+
+def plot_Wolin2019_model(ax, color="red", plot_type="line"):
+
+    freq_uniform, psd_lnm_resampled, psd_hnm_resampled = load_Wolin2019_model(freq_bin=0.1)
 
     if plot_type == "line":
         ax.plot(freq_uniform, psd_lnm_resampled, color=color, lw=0.5, ls="-", zorder=1, label="Low noise model")
@@ -114,3 +121,53 @@ def plot_standard_noise(ax):
     for color, beta in zip(color_list, beta_list):
         ax.axhline(y=beta, color=color, lw=0.5, ls="--", zorder=1)
         ax.axvline(x=beta, color=color, lw=0.5, ls="--", zorder=1)
+
+
+def compare_Wolin2019_model(obs_freq, obs_psd, method="above", f_min=1, f_max=100, freq_bin=0.1):
+
+    # (1) prepare the observed freq-psd
+    freq = np.asarray(obs_freq, dtype=float)
+    psd = np.asarray(obs_psd, dtype=float)
+
+    # (2) prepare the Wolin2019_model
+    freq_uniform, psd_lnm_resampled, psd_hnm_resampled = load_Wolin2019_model(freq_bin=freq_bin)
+    model_freq = freq_uniform
+    if method == "above":
+        model_psd = psd_hnm_resampled  # above the high-noise model, this is likely for the debris-flow events
+    elif method == "below":
+        model_psd = psd_lnm_resampled  # below the low-noise model, this is NOT likely for the debris-flow events
+    else:
+        raise ValueError(f"Unsupported method={method}")
+
+    # (3) define the freq bins and assign every observed sample to one of them
+    n_bins = round((f_max - f_min) / freq_bin)
+    bin_edges = np.linspace(f_min, f_max, n_bins + 1)
+
+    model_on_f = np.interp(freq, model_freq, model_psd)
+    which_bin = np.digitize(freq, bin_edges) - 1  # samples outside [f_min, f_max) fall outside 0..n_bins-1
+
+    # (4) one flag per bin
+    # 1 >> the event satisfies the condition in this bin
+    # 0 >> it does not
+    # NaN >> the event has no valid samples in this bin (excluded from the ratio later)
+    flags = np.full(n_bins, np.nan)
+
+    for i in range(n_bins):
+        m = (which_bin == i) & np.isfinite(psd)
+        if m.any():  # if any True
+            obs_mean, model_mean = np.mean(psd[m]), np.mean(model_on_f[m])
+
+            if method == "above":
+                if obs_mean > model_mean:
+                    flags[i] = 1.0
+                else:
+                    flags[i] = 0.0
+            elif method == "below":
+                if obs_mean < model_mean:
+                    flags[i] = 1.0
+                else:
+                    flags[i] = 0.0
+            else:
+                raise ValueError(f"Unsupported method={method}")
+
+    return bin_edges, flags

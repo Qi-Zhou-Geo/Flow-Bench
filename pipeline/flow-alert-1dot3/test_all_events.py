@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-09-18T15:13:51
+# __modification time__ = Last modified: 2026-11-02T15:17:58
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -25,7 +25,7 @@ sys.path.append(str(project_root))
 # endregion
 
 # import the custom functions
-from func.flow_bench.FlowBench import FlowBench
+from func.flow_bench.FlowBench import FlowBenchSeis
 from func.flow_bench.unique_identifier import build_identifier
 from func.toolkit.xlsx_to_txt import xlsx2txt
 from func.seismic.denoising import denoise_st
@@ -70,8 +70,8 @@ def main(event_id, extra_time=24):  # run 24 hours data
     # endregion
 
     # region
-    # load the FlowBench class
-    fb = FlowBench(version=fb_version)
+    # load the FlowBenchSeis class
+    fb = FlowBenchSeis(version=fb_version)
     seis_meta = fb.get_metadata(meta_type="seis", print_meta=False)
     event_meta = fb.get_metadata(meta_type="event", print_meta=False)  # event start and end time
 
