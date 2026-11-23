@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-18T15:25:34
+# __modification time__ = Last modified: 2026-11-02T16:23:59
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -27,7 +27,7 @@ sys.path.append(str(project_root))
 # endregion
 
 # import the custom functions
-from data.meta.paz_meta import load_paz
+from config.paz_meta import load_paz
 from func.toolkit.nextcloud_IO import data_exchange
 from func.toolkit.load_key import load_nextcloud_key
 from func.seismic.remove_response import cooking_recipe

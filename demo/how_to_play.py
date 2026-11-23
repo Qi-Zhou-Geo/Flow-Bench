@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-10-15T10:38:38
+# __modification time__ = Last modified: 2026-11-02T15:11:23
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -26,12 +26,12 @@ sys.path.append(str(project_root))
 # endregion
 
 # import the custom functions
-from func.flow_bench.FlowBench import FlowBench
+from func.flow_bench.FlowBench import FlowBenchSeis
 from func.seismic.plot_obspy_st import psd_plot
 
 # (1) Load the one debris flow event
 version = "v2dot1dot5"
-fb = FlowBench(version=version)
+fb = FlowBenchSeis(version=version)
 # load the meta
 seis_meta = fb.get_metadata(meta_type="seis", print_meta=False)
 event_meta = fb.get_metadata(meta_type="event", print_meta=False)

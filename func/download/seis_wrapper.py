@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-18T16:16:32
+# __modification time__ = Last modified: 2026-11-02T22:25:38
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -25,54 +25,75 @@ sys.path.append(str(project_root))
 # endregion
 
 # import the custom functions
-from data.meta.paz_meta import load_paz
+from config.paz_meta import load_paz
 from func.seismic.round_time import round_time
 from func.seismic.remove_response import cooking_recipe
 from func.download.seis import load_raw_fdsn, load_raw_nextcloud, load_raw_glic, get_seis
 
 
-def all_seis_data(seis_meta, event_meta, buffer, data_source):
+def all_seis_data(seis_meta, event_meta, buffer, data_source, save_st=True):
     """
-    Download the alll debris-flow seismic records.
+    Download seismic records for all debris-flow events.
 
     Args:
-        buffer (int, optional): Number of Julian days to extend around each event.
+        seis_meta (pd.DataFrame): Seismic metadata.
+
+        event_meta (pd.DataFrame): Event metadata.
+
+        buffer (int): Number of Julian days to extend around each event.
             For example, if an event occurs on Julian day j and buffer=1,
             data from Julian days [j-1, j, j+1] will be downloaded.
 
-            Note: Zenodo or private data sources may not include this full time range,
-            because the original released data may be shorter.
+            Note: Zenodo or private data sources may not cover this full time range,
+            because the originally released data may span a shorter period.
 
-            Defaults to 1.
+        data_source (str): Data source to use.
+            Use "FDSN" to automatically download records from FDSN servers.
+            For non-FDSN records, use "Nextcloud" to access our pre-downloaded data.
+            "GLIC" is reserved for the development team.
 
-        data_source (str, optional): Data source to use. Options are "FDSN", "Zenodo", or "GLIC".
-            "FDSN" denotes data hosted on an FDSN server.
-            "Zenodo" and "GLIC" denote data from peer-reviewed papers,
-            which are archived either on the GFZ GLIC server or in publicly accessible Zenodo repositories.
-
-            Defaults to "FDSN".
+        save_st (bool, optional): Whether to save the seismic data locally.
+            Defaults to True.
     """
 
     # copy the df frame
     seis_meta_copy, event_meta_copy = seis_meta.copy(), event_meta.copy()
     client_arr = np.array(seis_meta_copy["seis_client"])
 
+    # region >> set the data source
+    data_not_in_fdsn = ["ncdc", "Ghub", "Zenodo", "private"]
+
+    msg_fdsn = (
+        f"For seismic data not available through FDSN, e.g., {data_not_in_fdsn}, please either:\n"
+        "(1) download the data manually and use the required format;\n"
+        "format: ~/data/seis_raw/continent/catchment/year/station/channel/network.station.channel.year.day-of-year.mseed\n"
+        'or (2) rerun this function with <data_source>="Nextcloud" to use our pre-downloaded data on Nextcloud.\n\n'
+    )
+
     if data_source == "FDSN":
         down_func = load_raw_fdsn
-        keep_idx = ~np.isin(client_arr, ["Zenodo", "Private"])
+        keep_idx = ~np.isin(client_arr, data_not_in_fdsn)
 
         msg = f"Note! You may need 4.5 Gb space to save the data from <data_source>={data_source}\n\n."
         print(msg)
-    elif data_source in ["Zenodo", "Nextcloud"]:
-        # load_raw_zenodo not supported so far. 2026-08-16T17:08:50
+        print(msg_fdsn)
+
+    elif data_source == "Nextcloud":
         down_func = load_raw_nextcloud
-        keep_idx = np.isin(client_arr, ["Zenodo", "Private"])
+        keep_idx = np.isin(client_arr, data_not_in_fdsn)
 
         msg = f"Note! You may need 4.5 Gb space to save the data from <data_source>={data_source}\n\n."
         print(msg)
+
+        msg = (
+            "This option downloads our pre-downloaded non-FDSN records from Nextcloud.\n"
+            'For seismic data available through FDSN, rerun this function with <data_source>="FDSN".\n\n'
+        )
+        print(msg)
+
     elif data_source == "GLIC":
         down_func = load_raw_glic
-        keep_idx = np.isin(client_arr, ["Zenodo", "Private"])
+        keep_idx = np.isin(client_arr, data_not_in_fdsn)
 
         msg = "Warning! Only the development team is allowed to run this step.\n"
         print(msg)
@@ -82,8 +103,18 @@ def all_seis_data(seis_meta, event_meta, buffer, data_source):
 
         msg = f"Note! You may need 4.5 Gb space to save the data from <data_source>={data_source}\n\n."
         print(msg)
+
+    elif data_source == "Zenodo":
+        # load_raw_zenodo not supported so far.
+        # QZ at 2026-11-02T15:40:52
+        msg = "Flow-Bench does not support automatic downloads of seismic data from Zenodo."
+        print(msg)
+        print(msg_fdsn)
+
+        raise ValueError(f"<data_source>={data_source}")
     else:
         raise ValueError(f"Unsupported <data_source>: {data_source}")
+    # endregion
 
     seis_meta_copy = seis_meta_copy.loc[keep_idx].reset_index(drop=True)
     event_meta_copy = event_meta_copy.loc[keep_idx].reset_index(drop=True)
@@ -91,7 +122,10 @@ def all_seis_data(seis_meta, event_meta, buffer, data_source):
     total_inter = len(seis_meta_copy)
 
     for event_id in tqdm(
-        range(total_inter), desc=f"Downing data from {data_source}", total=total_inter, file=sys.stdout
+        range(total_inter),
+        desc=f"Downing data from {data_source}",
+        total=total_inter,
+        file=sys.stdout,
     ):
         seis_client = seis_meta_copy["seis_client"][event_id]
         if seis_client in client_list:
@@ -146,7 +180,7 @@ def all_seis_data(seis_meta, event_meta, buffer, data_source):
                         starttime,
                         endtime,
                         # default params
-                        save_st=True,
+                        save_st=save_st,  # you must set as True, otherwise, no data will be saved
                         save_inv=save_inv,
                     )
 
@@ -183,8 +217,10 @@ def one_seis_event(seis_meta, event_meta, event_id, starttime, endtime, f_min, f
     event_t_s = event_meta_copy["event_time_s"][event_id]
     event_t_e = event_meta_copy["event_time_e"][event_id]
 
-    starttime = UTCDateTime(round_time(starttime))
-    endtime = UTCDateTime(round_time(endtime))
+    t1 = round_time(t=starttime, direction="previous")
+    starttime = UTCDateTime(t1)
+    t2 = round_time(t=endtime, direction="next")
+    endtime = UTCDateTime(t2)
     # endregion
 
     # rquest data

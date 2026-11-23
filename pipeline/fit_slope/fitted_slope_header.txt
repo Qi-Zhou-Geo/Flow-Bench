@@ -1,0 +1,8 @@
+0,
+str,
+
+1,2,3,4,5,6,7,8,9,
+beta, beta_CI[0], beta_CI[1], intercept, s_residual, r_squared, p_value, peak_freq,
+
+10,11,12,13,14,15,16
+beta, beta_CI[0], beta_CI[1], intercept, s_residual, r_squared, p_value, peak_freq

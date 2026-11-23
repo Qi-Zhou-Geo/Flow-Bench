@@ -1,0 +1,54 @@
+
+
+Volcanic-derived    Volcanic deposits/volcanic terrain constitute a characteristic sediment source
+
+Earthquake-disturbed    A significant earthquake has substantially modified sediment availability through landslides, rockfalls, slope destabilization, etc.
+
+Wildfire-disturbed  Wildfire has substantially modified sediment availability through vegetation/soil disturbance
+
+Hillslope-derived   No major volcanic, seismic, or wildfire disturbance defines the sediment system; sediment is supplied by ongoing hillslope/channel processes
+
+a. Hillslope-derived
+Illgraben
+Chalk Cliffs
+Jiangjia
+Tianmo
+
+b. Hillslope-derived
+Joffre
+Lucía
+Ramche
+Tbilisa
+Goulinping
+
+
+
+
+c. Volcanic-derived
+Shasta
+Casamicciola
+Ruapehu
+Baker
+
+d. Volcanic-derived
+Helens
+Hood
+Meager
+Rainier
+
+
+
+
+2. Earthquake-disturbed
+Ergou
+Foutangba
+Hsiaolin
+
+Wandong
+Hailuogou
+Bothekoshi
+
+3. Wildfire-disturbed
+Montecito
+Museum Fire
+

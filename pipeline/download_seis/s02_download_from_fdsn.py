@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# __modification time__ = Last modified: 2026-08-18T13:18:41
+# __modification time__ = Last modified: 2026-11-03T10:46:05
 # __author__ = Qi Zhou, GFZ Helmholtz Centre for Geosciences
 # __find me__ = qi.zhou@gfz.de, qi.zhou.geo@gmail.com, https://github.com/Qi-Zhou-Geo
 # Please do not distribute this code without the author's permission
@@ -20,7 +20,20 @@ sys.path.append(str(project_root))
 # endregion
 
 # import the custom functions
-from func.flow_bench.FlowBench import FlowBench
+from func.flow_bench.FlowBench import FlowBenchSeis
 
-fb = FlowBench(version="v2dot1dot2")
-fb.down_all_seis_data(buffer_day=1, data_source="FDSN")
+version = "essd"
+buffer_day = 1
+# For example, if an event occurs on Julian day j and buffer_day=1,
+# data from Julian days [j-1, j, j+1] will be downloaded.
+
+fb = FlowBenchSeis(version=version)
+
+# Download debris-flow seismic data hosted on FDSN.
+fb.down_all_seis_data(buffer_day=buffer_day, data_source="FDSN")
+
+# Download our pre-downloaded data from Nextcloud.
+# Original sources include ncdc, Ghub, Zenodo, and private datasets.
+# For manual downloads, use the required format and folder structure.
+# "format: ~/data/seis_raw/continent/catchment/year/station/channel/network.station.channel.year.day-of-year.mseed\n"
+fb.down_all_seis_data(buffer_day=buffer_day, data_source="Nextcloud")
