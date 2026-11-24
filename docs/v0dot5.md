@@ -1,5 +1,5 @@
 ```sh
-# Last modified: 2026-11-10T17:22:16
+# Last modified: 2026-11-24T10:58:39
 # Author: Qi Zhou
 ```
 ## Data and code used for Flow-Bench v0.5
@@ -7,7 +7,7 @@
 ### Data
 **(0) Seismic metadata**
 
-The Excel catalog is included in *`Flow-bench_v0dot5.zip`*. It contains the information needed to download raw seismic data from FDSN services or from the cited archives when data are unavailable through FDSN. The file is located at [~/Flow-bench_v0dot5/data/event_catalog/Flow_Bench_Catalog_essd.xlsx](../data/event_catalog/Flow_Bench_Catalog_essd.xlsx).
+The Excel catalog *`xlsx`* file is included in *`Flow-bench_v0dot5.zip`*. It contains the information needed to download raw seismic data from FDSN services or from the cited archives when data are unavailable through FDSN. The file is located at [~/Flow-bench_v0dot5/data/event_catalog/Flow_Bench_Catalog_essd.xlsx](../data/event_catalog/Flow_Bench_Catalog_essd.xlsx).
 
 **(1) Unpublished seismic data**
 
@@ -30,10 +30,10 @@ Sensor response *`XML`* files are included with the seismic data in *`seis_raw_v
 
 **(4) Processed seismic and hydrogeomorphic data**
 
-Processed seismic and hydrogeomorphic characteristics for all events and catchments are provided in [~/Flow-bench_v0dot5/data/seis_cooked](../data/seis_cooked) and [~/Flow-bench_v0dot5/data/hydro_cooked](../data/hydro_cooked), respectively. To regenerate these results,[~/Flow-bench_v0dot5/run pipeline/build_seis/run_build.py](../pipeline/build_seis/run_build.py) and [~/Flow-bench_v0dot5/pipeline/build_geo/run_all.py](../pipeline/build_geo/run_all.py) on your computer.
+Processed *`seismic`* and *`hydrogeomorphic`* characteristics for all events and catchments are provided in [~/Flow-bench_v0dot5/data/seis_cooked](../data/seis_cooked) and [~/Flow-bench_v0dot5/data/hydro_cooked](../data/hydro_cooked), respectively. If you want to regenerate these results by youself,[~/Flow-bench_v0dot5/run pipeline/build_seis/run_build.py](../pipeline/build_seis/run_build.py) and [~/Flow-bench_v0dot5/pipeline/build_geo/run_all.py](../pipeline/build_geo/run_all.py) on your computer. If y
 
 ### Code
-The code used for Flow-Bench (v0.5) is available at [Flow-Bench](https://github.com/Qi-Zhou-Geo/Flow-Bench).
+The code used for *`Flow-Bench_v0dot5`* is archived here as *`Flow-Bench_v0dot5.zip`*, and also available at [GitHub >> Flow-Bench](https://github.com/Qi-Zhou-Geo/Flow-Bench).
 
 ### Usage
 To use the code, place the raw seismic data in [~/Flow-bench_v0dot5/data/seis_raw](../data/seis_raw). If you download data from FDSN using the code [demo](../demo/how_to_play.md), the raw records and seismic *`XML`* files will be saved at [~/Flow-bench_v0dot5/data/seis_raw](../data/seis_raw).
